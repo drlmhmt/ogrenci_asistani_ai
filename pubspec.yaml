@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  lottie: ^3.3.2
 
 dev_dependencies:
   flutter_test:
@@ -30,7 +31,4 @@ flutter_launcher_icons:
 flutter:
   uses-material-design: true
   assets:
-    - assets/Frame 427321068.png
-    - assets/Logo.png
-    - assets/Splash.jpg
-    - assets/Splash-1.jpg
+    - assets/

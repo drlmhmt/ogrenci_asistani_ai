@@ -6,20 +6,25 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/material.dart';
 
 import 'package:ogrenci_asistani/main.dart';
+import 'package:ogrenci_asistani/screens/launch_screen.dart';
+import 'package:ogrenci_asistani/screens/onboarding_screen.dart';
 
 void main() {
-  testWidgets('Launch screen then home screen', (WidgetTester tester) async {
+  testWidgets('Launch screen then onboarding screen', (WidgetTester tester) async {
     await tester.pumpWidget(const BilgiAIApp());
 
     expect(find.byType(LaunchScreen), findsOneWidget);
-    expect(find.byType(AnaEkran), findsNothing);
+    expect(find.byType(OnboardingScreen), findsNothing);
 
-    await tester.pump(const Duration(seconds: 4));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(seconds: 2));
+    // Onboarding screen has repeating animations; avoid pumpAndSettle timeout.
+    await tester.pump(const Duration(milliseconds: 500));
 
-    expect(find.byType(AnaEkran), findsOneWidget);
-    expect(find.text('Bilgi AI'), findsOneWidget);
+    expect(find.byType(OnboardingScreen), findsOneWidget);
+    expect(find.text('Çalışma Düzenini Yeniden Tasarla'), findsOneWidget);
+    expect(find.widgetWithText(ElevatedButton, 'İleri'), findsWidgets);
   });
 }
