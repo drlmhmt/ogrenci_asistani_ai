@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "53815400332",
+    "project_id": "ogrenci-asistani-60eda",
+    "storage_bucket": "ogrenci-asistani-60eda.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53815400332:android:80ef96de2fe701aa8d68a9",
+        "android_client_info": {
+          "package_name": "com.example.ogrenci_asistani"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqfbOuSMo8F5EsmD7AjspM5OjJV74WmX4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
