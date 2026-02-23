@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'onboarding_screen.dart';
+import 'login_page.dart';
 
 class LaunchScreen extends StatefulWidget {
   const LaunchScreen({super.key});
@@ -17,7 +17,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+        MaterialPageRoute(builder: (context) => const LoginPage()),
       );
     });
   }
