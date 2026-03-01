@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import 'ana_ekran.dart';
+import '../services/auth_service.dart';
+import '../services/onboarding_state_service.dart';
+import 'login_page.dart';
 
 const double _goalCardHeight = 70;
 
@@ -14,6 +16,9 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
+  final OnboardingStateService _onboardingStateService =
+      OnboardingStateService();
+  final AuthService _authService = AuthService();
   int _activePageIndex = 0;
   int _selectedGoalIndex = 1;
 
@@ -76,10 +81,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Future<void> _handleContinue() async {
     final bool isLastPage = _activePageIndex == _steps.length - 1;
     if (isLastPage) {
+      final selectedGoal = _goalItems[_selectedGoalIndex];
+
+      await _onboardingStateService.setCompleted(
+        goalIndex: _selectedGoalIndex,
+        goalText: selectedGoal.text,
+      );
+      await _authService.syncOnboardingSelectionForCurrentUser();
+
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const AnaEkran()),
+        MaterialPageRoute(builder: (context) => const LoginPage()),
       );
       return;
     }
@@ -226,11 +239,7 @@ class _ImageStepContent extends StatelessWidget {
                   }
 
                   return Column(
-                    children: [
-                      headerBlock(),
-                      const Spacer(),
-                      continueButton,
-                    ],
+                    children: [headerBlock(), const Spacer(), continueButton],
                   );
                 },
               ),
@@ -246,10 +255,7 @@ class _AnimatedAssetScene extends StatelessWidget {
   final String? imagePath;
   final String? lottiePath;
 
-  const _AnimatedAssetScene({
-    this.imagePath,
-    this.lottiePath,
-  });
+  const _AnimatedAssetScene({this.imagePath, this.lottiePath});
 
   @override
   Widget build(BuildContext context) {
@@ -373,7 +379,7 @@ class _GoalsStepContent extends StatelessWidget {
                     builder: (context, constraints) {
                       final double requiredHeight =
                           (goalItems.length * _goalCardHeight) +
-                              ((goalItems.length - 1) * 10);
+                          ((goalItems.length - 1) * 10);
                       final bool shouldScroll =
                           requiredHeight > constraints.maxHeight;
 
@@ -436,9 +442,10 @@ class _PulseBadgeState extends State<_PulseBadge>
     duration: const Duration(milliseconds: 1800),
   )..repeat(reverse: true);
 
-  late final Animation<double> _scale = Tween<double>(begin: 1, end: 1.06).animate(
-    CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-  );
+  late final Animation<double> _scale = Tween<double>(
+    begin: 1,
+    end: 1.06,
+  ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
   @override
   void dispose() {
@@ -459,15 +466,16 @@ class _PulseBadgeState extends State<_PulseBadge>
             colors: [Color(0xFF18366B), Color(0xFF111F39)],
           ),
           borderRadius: BorderRadius.circular(999),
-          border: Border.all(
-            color: const Color(0x883E6CFF),
-            width: 1.2,
-          ),
+          border: Border.all(color: const Color(0x883E6CFF), width: 1.2),
         ),
         child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.auto_awesome_rounded, color: Color(0xFFC9D8FF), size: 16),
+            Icon(
+              Icons.auto_awesome_rounded,
+              color: Color(0xFFC9D8FF),
+              size: 16,
+            ),
             SizedBox(width: 6),
             Text(
               'Kişiselleştirilmiş Akış',
@@ -513,7 +521,9 @@ class _GoalCard extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
-            color: isSelected ? const Color(0xFF4E73FF) : const Color(0x1FFFFFFF),
+            color: isSelected
+                ? const Color(0xFF4E73FF)
+                : const Color(0x1FFFFFFF),
             width: isSelected ? 1.2 : 1,
           ),
           boxShadow: isSelected
@@ -564,10 +574,7 @@ class _PageDots extends StatelessWidget {
   final int totalPages;
   final int activeIndex;
 
-  const _PageDots({
-    required this.totalPages,
-    required this.activeIndex,
-  });
+  const _PageDots({required this.totalPages, required this.activeIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -594,10 +601,7 @@ class _ContinueButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
 
-  const _ContinueButton({
-    required this.label,
-    required this.onPressed,
-  });
+  const _ContinueButton({required this.label, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -609,10 +613,7 @@ class _ContinueButton extends StatelessWidget {
           foregroundColor: Colors.black,
           minimumSize: const Size.fromHeight(52),
           shape: const StadiumBorder(),
-          textStyle: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
+          textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         onPressed: onPressed,
         child: Text(label),
@@ -621,10 +622,7 @@ class _ContinueButton extends StatelessWidget {
   }
 }
 
-enum _OnboardingStepType {
-  image,
-  goals,
-}
+enum _OnboardingStepType { image, goals }
 
 class _OnboardingStep {
   final _OnboardingStepType type;
@@ -640,24 +638,21 @@ class _OnboardingStep {
     required this.title,
     required this.subtitle,
     required this.backgroundColor,
-  })  : assert(imagePath != null || lottiePath != null),
-        type = _OnboardingStepType.image;
+  }) : assert(imagePath != null || lottiePath != null),
+       type = _OnboardingStepType.image;
 
   const _OnboardingStep.goals({
     required this.title,
     required this.subtitle,
     required this.backgroundColor,
-  })  : type = _OnboardingStepType.goals,
-        imagePath = null,
-        lottiePath = null;
+  }) : type = _OnboardingStepType.goals,
+       imagePath = null,
+       lottiePath = null;
 }
 
 class _GoalItem {
   final IconData icon;
   final String text;
 
-  const _GoalItem({
-    required this.icon,
-    required this.text,
-  });
+  const _GoalItem({required this.icon, required this.text});
 }
