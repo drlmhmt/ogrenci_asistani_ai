@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
@@ -77,7 +78,12 @@ if (user != null && !user.emailVerified) {
       _goToHome();
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
+      if (kDebugMode) debugPrint('Giriş hatası: code=${e.code}, message=${e.message}');
       TopAlert.show(context, message: _mapLoginError(e));
+    } catch (e, st) {
+      if (!mounted) return;
+      if (kDebugMode) debugPrint('Giriş hatası (beklenmeyen): $e\n$st');
+      TopAlert.show(context, message: 'Giriş yapılamadı. Tekrar dene.');
     } finally {
       if (mounted) setState(() => _isEmailLoading = false);
     }
@@ -91,7 +97,12 @@ if (user != null && !user.emailVerified) {
       _goToHome();
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
+      if (kDebugMode) debugPrint('Google giriş hatası: code=${e.code}, message=${e.message}');
       TopAlert.show(context, message: _mapSocialError(e, provider: 'Google'));
+    } catch (e, st) {
+      if (!mounted) return;
+      if (kDebugMode) debugPrint('Google giriş hatası (beklenmeyen): $e\n$st');
+      TopAlert.show(context, message: 'Google ile giriş yapılamadı.');
     } finally {
       if (mounted) setState(() => _isGoogleLoading = false);
     }
@@ -105,7 +116,12 @@ if (user != null && !user.emailVerified) {
       _goToHome();
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
+      if (kDebugMode) debugPrint('Apple giriş hatası: code=${e.code}, message=${e.message}');
       TopAlert.show(context, message: _mapSocialError(e, provider: 'Apple'));
+    } catch (e, st) {
+      if (!mounted) return;
+      if (kDebugMode) debugPrint('Apple giriş hatası (beklenmeyen): $e\n$st');
+      TopAlert.show(context, message: 'Apple ile giriş yapılamadı.');
     } finally {
       if (mounted) setState(() => _isAppleLoading = false);
     }
@@ -152,11 +168,16 @@ if (user != null && !user.emailVerified) {
       case 'account-exists-with-different-credential':
         return 'Bu email farklı bir yöntem ile kayıtlı.';
       case 'operation-not-allowed':
-        return '$provider girişi Firebase tarafında aktif değil.';
+        return '$provider girişi Firebase Console > Authentication > Sign-in method bölümünden etkinleştir. Android için SHA-1 parmak izini ekle.';
       case 'network-request-failed':
         return 'İnternet bağlantısını kontrol et ve tekrar dene.';
+      case 'popup-closed-by-user':
+      case 'cancelled-popup-request':
+        return 'Giriş iptal edildi.';
       default:
-        return '$provider ile giriş yapılamadı.';
+        return kDebugMode
+            ? '$provider hatası: ${e.code} - ${e.message ?? ""}'
+            : '$provider ile giriş yapılamadı.';
     }
   }
 

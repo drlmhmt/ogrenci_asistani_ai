@@ -12,7 +12,20 @@
           "package_name": "com.example.ogrenci_asistani"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "53815400332-nup59seiemum5idpk9hmhg0h744dejo6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ogrenci_asistani",
+            "certificate_hash": "34f3478dbd5eb09f57c05f7511156d14802dd473"
+          }
+        },
+        {
+          "client_id": "53815400332-08kr6155vd4froigigfdbj6t5rbhdsga.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAqfbOuSMo8F5EsmD7AjspM5OjJV74WmX4"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53815400332-08kr6155vd4froigigfdbj6t5rbhdsga.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "53815400332-bvptijso7o7319gvl26gsln23p2assrq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ogrenciAsistani"
+              }
+            }
+          ]
         }
       }
     }

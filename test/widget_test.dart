@@ -14,7 +14,7 @@ import 'package:ogrenci_asistani/screens/onboarding_screen.dart';
 
 void main() {
   testWidgets('Launch screen then onboarding screen', (WidgetTester tester) async {
-    await tester.pumpWidget(const BilgiAIApp());
+    await tester.pumpWidget(const MyApp());
 
     expect(find.byType(LaunchScreen), findsOneWidget);
     expect(find.byType(OnboardingScreen), findsNothing);

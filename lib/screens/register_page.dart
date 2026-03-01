@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:math' as math;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
@@ -87,7 +88,11 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       );
     } on FirebaseAuthException catch (e) {
+      if (kDebugMode) debugPrint('Kayıt hatası: code=${e.code}, message=${e.message}');
       _showError(_mapRegisterError(e));
+    } catch (e, st) {
+      if (kDebugMode) debugPrint('Kayıt hatası (beklenmeyen): $e\n$st');
+      _showError('Beklenmeyen bir hata oluştu. Tekrar dene.');
     } finally {
       if (mounted) setState(() => _isEmailLoading = false);
     }
@@ -100,7 +105,11 @@ class _RegisterPageState extends State<RegisterPage> {
       if (cred == null) return;
       _goToHome();
     } on FirebaseAuthException catch (e) {
+      if (kDebugMode) debugPrint('Google giriş hatası: code=${e.code}, message=${e.message}');
       _showError(_mapSocialError(e, provider: 'Google'));
+    } catch (e, st) {
+      if (kDebugMode) debugPrint('Google giriş hatası (beklenmeyen): $e\n$st');
+      _showError('Google ile giriş yapılamadı.');
     } finally {
       if (mounted) setState(() => _isGoogleLoading = false);
     }
@@ -113,7 +122,11 @@ class _RegisterPageState extends State<RegisterPage> {
       if (cred == null) return;
       _goToHome();
     } on FirebaseAuthException catch (e) {
+      if (kDebugMode) debugPrint('Apple giriş hatası: code=${e.code}, message=${e.message}');
       _showError(_mapSocialError(e, provider: 'Apple'));
+    } catch (e, st) {
+      if (kDebugMode) debugPrint('Apple giriş hatası (beklenmeyen): $e\n$st');
+      _showError('Apple ile giriş yapılamadı.');
     } finally {
       if (mounted) setState(() => _isAppleLoading = false);
     }
@@ -137,9 +150,15 @@ class _RegisterPageState extends State<RegisterPage> {
       case 'weak-password':
         return 'Şifre en az 6 karakter olmalı.';
       case 'operation-not-allowed':
-        return 'Email/şifre kaydı Firebase tarafında aktif değil.';
+        return 'Email/şifre kaydı Firebase tarafında aktif değil. Firebase Console > Authentication > Sign-in method bölümünden etkinleştir.';
+      case 'too-many-requests':
+        return 'Çok fazla deneme. Lütfen daha sonra tekrar dene.';
+      case 'network-request-failed':
+        return 'İnternet bağlantısını kontrol et ve tekrar dene.';
       default:
-        return 'Kayıt işlemi başarısız oldu.';
+        return kDebugMode
+            ? 'Kayıt hatası: ${e.code} - ${e.message ?? ""}'
+            : 'Kayıt işlemi başarısız oldu.';
     }
   }
 
@@ -148,11 +167,16 @@ class _RegisterPageState extends State<RegisterPage> {
       case 'account-exists-with-different-credential':
         return 'Bu email farklı bir yöntem ile kayıtlı.';
       case 'operation-not-allowed':
-        return '$provider girişi Firebase tarafında aktif değil.';
+        return '$provider girişi Firebase Console > Authentication > Sign-in method bölümünden etkinleştir. Android için SHA-1 parmak izini ekle.';
       case 'network-request-failed':
-        return 'İnternet bağlantısı kontrol edilmedi. Tekrar dene.';
+        return 'İnternet bağlantısını kontrol et ve tekrar dene.';
+      case 'popup-closed-by-user':
+      case 'cancelled-popup-request':
+        return 'Giriş iptal edildi.';
       default:
-        return '$provider ile giriş yapılamadı.';
+        return kDebugMode
+            ? '$provider hatası: ${e.code} - ${e.message ?? ""}'
+            : '$provider ile giriş yapılamadı.';
     }
   }
 

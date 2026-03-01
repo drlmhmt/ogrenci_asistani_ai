@@ -39,30 +39,39 @@ class _SplashRouterState extends State<SplashRouter> {
   }
 
   Future<void> _route() async {
+    // Firebase Auth'ın yerel oturum bilgisini yüklemesini bekle
+    try {
+      await FirebaseAuth.instance.authStateChanges().first
+          .timeout(const Duration(seconds: 3));
+    } catch (_) {}
+
+    if (!mounted) return;
+
     final onboardingSeen = await OnboardingStateService().isOnboardingSeen();
     final user = FirebaseAuth.instance.currentUser;
 
     if (!mounted) return;
 
-    if (!onboardingSeen) {
-      // Onboarding hiç görülmemiş
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const OnboardingScreen()),
-      );
-    } else if (user != null && user.emailVerified) {
-      // Giriş yapmış ve doğrulanmış
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const AnaEkran()),
-      );
-    } else {
-      // Onboarding görülmüş ama giriş yapılmamış
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const LoginPage()),
-      );
-    }
+    // Navigator overlay ilk frame sonrası hazır olur
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (!onboardingSeen) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+        );
+      } else if (user != null && user.emailVerified) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const AnaEkran()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginPage()),
+        );
+      }
+    });
   }
 
   @override
