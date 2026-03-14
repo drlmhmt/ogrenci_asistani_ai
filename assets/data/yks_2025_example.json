@@ -1,0 +1,354 @@
+{
+  "year": "2025",
+  "updatedAt": "2025-03-14T00:00:00.000Z",
+  "exams": [
+    {
+      "type": "tyt",
+      "name": "TYT",
+      "totalQuestions": 120,
+      "subjects": [
+        {
+          "id": "tyt_turkce",
+          "name": "Türkçe",
+          "questionCount": 40,
+          "topics": [
+            { "id": "t1", "name": "Sözcükte Anlam", "averageQuestionCount": 3.2, "order": 1 },
+            { "id": "t2", "name": "Cümlede Anlam", "averageQuestionCount": 4.1, "order": 2 },
+            { "id": "t3", "name": "Paragrafta Anlam", "averageQuestionCount": 22.5, "order": 3 },
+            { "id": "t4", "name": "Paragraf Yapısı", "averageQuestionCount": 4.6, "order": 4 },
+            { "id": "t5", "name": "Ses Bilgisi", "averageQuestionCount": 1.0, "order": 5 },
+            { "id": "t6", "name": "Yazım Kuralları", "averageQuestionCount": 2.0, "order": 6 },
+            { "id": "t7", "name": "Noktalama İşaretleri", "averageQuestionCount": 1.5, "order": 7 },
+            { "id": "t8", "name": "Sözcük Türleri", "averageQuestionCount": 2.0, "order": 8 },
+            { "id": "t9", "name": "Sözcükte Yapı", "averageQuestionCount": 1.2, "order": 9 },
+            { "id": "t10", "name": "Cümlenin Ögeleri", "averageQuestionCount": 1.0, "order": 10 },
+            { "id": "t11", "name": "Fiil, Ek-Fiil", "averageQuestionCount": 1.5, "order": 11 }
+          ]
+        },
+        {
+          "id": "tyt_matematik",
+          "name": "Matematik",
+          "questionCount": 30,
+          "topics": [
+            { "id": "m1", "name": "Temel Kavramlar", "averageQuestionCount": 5.6, "order": 1 },
+            { "id": "m2", "name": "Bölme ve Bölünebilme", "averageQuestionCount": 1.4, "order": 2 },
+            { "id": "m3", "name": "Basit Eşitsizlikler", "averageQuestionCount": 2.4, "order": 3 },
+            { "id": "m4", "name": "Üslü Sayılar", "averageQuestionCount": 2.0, "order": 4 },
+            { "id": "m5", "name": "Denklem ve Eşitsizlik Uygulamaları", "averageQuestionCount": 11.6, "order": 5 },
+            { "id": "m6", "name": "Mantık", "averageQuestionCount": 1.0, "order": 6 },
+            { "id": "m7", "name": "Kümeler", "averageQuestionCount": 1.0, "order": 7 },
+            { "id": "m8", "name": "Permütasyon-Kombinasyon-Olasılık", "averageQuestionCount": 2.0, "order": 8 },
+            { "id": "m9", "name": "Oran-Orantı", "averageQuestionCount": 0.0, "order": 9 },
+            { "id": "m10", "name": "Veri (İstatistik)", "averageQuestionCount": 1.8, "order": 10 },
+            { "id": "m11", "name": "Fonksiyonlar", "averageQuestionCount": 1.2, "order": 11 }
+          ]
+        },
+        {
+          "id": "Tyt Geometri",
+          "name": "Geometri",
+          "questionCount": 10,
+          "topics": [
+            { "id": "m1", "name": "Doğruda ve Üçgende Açı", "averageQuestionCount": 2.2, "order": 1 },
+            { "id": "m2", "name": "Özel Üçgenler", "averageQuestionCount": 1.0, "order": 2 },
+            { "id": "m3", "name": "Üçgende Alan Benzerlik", "averageQuestionCount": 1.2, "order": 3 },
+            { "id": "m4", "name": "Çokgenler", "averageQuestionCount": 1.0, "order": 4 },
+            { "id": "m5", "name": "Özel Dörtgenler", "averageQuestionCount": 2.6, "order": 5 },
+            { "id": "m6", "name": "Katı Cisimler", "averageQuestionCount": 2.0, "order": 6 }
+          ]
+        },
+        {
+          "id": "tyt_tarih",
+          "name": "Tarih",
+          "questionCount": 5,
+          "topics": [
+            { "id": "th1", "name": "Tarih ve Zaman", "averageQuestionCount": 0.5, "order": 1 },
+            { "id": "th2", "name": "İlk ve Orta Çağ", "averageQuestionCount": 1.2, "order": 2 },
+            { "id": "th3", "name": "İslamiyet Öncesi Türk Tarihi", "averageQuestionCount": 1.0, "order": 3 },
+            { "id": "th4", "name": "Türk-İslam Tarihi", "averageQuestionCount": 1.5, "order": 4 },
+            { "id": "th5", "name": "Osmanlı Tarihi", "averageQuestionCount": 0.8, "order": 5 }
+          ]
+        },
+        {
+          "id": "tyt_cografya",
+          "name": "Coğrafya",
+          "questionCount": 5,
+          "topics": [
+            { "id": "c1", "name": "Doğa ve İnsan", "averageQuestionCount": 0.8, "order": 1 },
+            { "id": "c2", "name": "Yer Şekilleri", "averageQuestionCount": 1.2, "order": 2 },
+            { "id": "c3", "name": "İklim", "averageQuestionCount": 1.5, "order": 3 },
+            { "id": "c4", "name": "Nüfus ve Göç", "averageQuestionCount": 1.0, "order": 4 },
+            { "id": "c5", "name": "Ekonomik Faaliyetler", "averageQuestionCount": 0.5, "order": 5 }
+          ]
+        },
+        {
+          "id": "tyt_felsefe",
+          "name": "Felsefe",
+          "questionCount": 5,
+          "topics": [
+            { "id": "f1", "name": "Felsefeyi Tanıma", "averageQuestionCount": 1.0, "order": 1 },
+            { "id": "f2", "name": "Bilgi Felsefesi", "averageQuestionCount": 1.2, "order": 2 },
+            { "id": "f3", "name": "Bilim Felsefesi", "averageQuestionCount": 1.0, "order": 3 },
+            { "id": "f4", "name": "Varlık Felsefesi", "averageQuestionCount": 0.8, "order": 4 },
+            { "id": "f5", "name": "Ahlak Felsefesi", "averageQuestionCount": 1.0, "order": 5 }
+          ]
+        },
+        {
+          "id": "tyt_din",
+          "name": "Din Kültürü",
+          "questionCount": 5,
+          "topics": [
+            { "id": "d1", "name": "İnanç", "averageQuestionCount": 1.5, "order": 1 },
+            { "id": "d2", "name": "İbadet", "averageQuestionCount": 1.2, "order": 2 },
+            { "id": "d3", "name": "Hz. Muhammed", "averageQuestionCount": 1.0, "order": 3 },
+            { "id": "d4", "name": "Vahiy ve Akıl", "averageQuestionCount": 0.8, "order": 4 },
+            { "id": "d5", "name": "Ahlak ve Değerler", "averageQuestionCount": 0.5, "order": 5 }
+          ]
+        },
+        {
+          "id": "tyt_fizik",
+          "name": "Fizik",
+          "questionCount": 7,
+          "topics": [
+            { "id": "fz0", "name": "Fiziksel Niceliklerin Sınıflandırılması", "averageQuestionCount": 0.2, "order": 0 },
+            { "id": "fz1", "name": "Yapışma ve Birbirini Tutma", "averageQuestionCount": 0.2, "order": 1 },
+            { "id": "fz2", "name": "Hareket ve Kuvvet", "averageQuestionCount": 1, "order": 3 },
+            { "id": "fz3", "name": "Enerji", "averageQuestionCount": 1.2, "order": 4 },
+            { "id": "fz4", "name": "Isı ve Sıcaklık", "averageQuestionCount": 1.0, "order": 5 },
+            { "id": "fz5", "name": "Elektrik Devreleri", "averageQuestionCount": 1.0, "order": 6 },
+            { "id": "fz6", "name": "Dalgalar", "averageQuestionCount": 0.8, "order": 7 },
+            { "id": "fz7", "name": "Basınç", "averageQuestionCount": 0.4, "order": 8 },
+            { "id": "fz8", "name": "Kaldırma Kuvveti", "averageQuestionCount": 0.4, "order": 9 },
+            { "id": "fz9", "name": "Aydınlanma", "averageQuestionCount": 0.2, "order": 2 }, 
+            { "id": "fz10", "name": "Düzlem Aynalar", "averageQuestionCount": 0.4, "order": 10 },
+            { "id": "fz11", "name": "Küresel Aynalar", "averageQuestionCount": 0.2, "order": 11 },
+            { "id": "fz12", "name": "Mercekler", "averageQuestionCount": 0.4, "order": 12 }
+          ]
+        },
+        {
+          "id": "tyt_kimya",
+          "name": "Kimya",
+          "questionCount": 7,
+          "topics": [
+            { "id": "k1", "name": "Kimya Bilimi", "averageQuestionCount": 1.0, "order": 1 },
+            { "id": "k2", "name": "Atom ve Periyodik Sistem", "averageQuestionCount": 1.0, "order": 2 },
+            { "id": "k3", "name": "Kimyasal Türler Arası Etkileşim", "averageQuestionCount": 0.8, "order": 3 },
+            { "id": "k4", "name": "Maddenin Halleri", "averageQuestionCount": 1.2, "order": 4 },
+            { "id": "k5", "name": "Karışımlar", "averageQuestionCount": 1.6, "order": 5 },
+            { "id": "k6", "name": "Asit, Baz, Tuz", "averageQuestionCount": 1.2, "order": 6 },
+            { "id": "k7", "name": "Kimya Her Yerde", "averageQuestionCount": 0.2, "order": 7 }
+          ]
+        },
+        {
+          "id": "tyt_biyoloji",
+          "name": "Biyoloji",
+          "questionCount": 6,
+          "topics": [
+            { "id": "b1", "name": "Canlıların Ortak Özellikleri", "averageQuestionCount": 0.0, "order": 1 },
+            { "id": "b2", "name": "Canlıların Yapısında Bulunan Temel Bileşikler", "averageQuestionCount": 1.0, "order": 2 },
+            { "id": "b3", "name": "Hücre", "averageQuestionCount": 1.0, "order": 3 },
+            { "id": "b4", "name": "Canlıların Çeşitliliği", "averageQuestionCount": 1.0, "order": 4 },
+            { "id": "b5", "name": "Üreme", "averageQuestionCount": 1.0, "order": 5 },
+            { "id": "b6", "name": "Kalıtım", "averageQuestionCount": 1.0, "order": 6 },
+            { "id": "b7", "name": "Ekosistem Ekolojisi", "averageQuestionCount": 1.0, "order": 7 }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ayt",
+      "name": "AYT",
+      "totalQuestions": 160,
+      "subjects": [
+        {
+          "id": "ayt_matematik",
+          "name": "Matematik",
+          "questionCount": 40,
+          "fieldType": "sayisal",
+          "topics": [
+            { "id": "am1", "name": "Temel Kavramlar", "averageQuestionCount": 4.8, "order": 1 },
+            { "id": "am2", "name": "Fonksiyonlar", "averageQuestionCount": 2.5, "order": 2 },
+            { "id": "am3", "name": "Polinomlar", "averageQuestionCount": 1.4, "order": 3 },
+            { "id": "am4", "name": "İkinci Dereceden Denklemler", "averageQuestionCount": 2.4, "order": 4 },
+            { "id": "am5", "name": "Trigonometri", "averageQuestionCount": 3.0, "order": 5 },
+            { "id": "am6", "name": "Logaritma", "averageQuestionCount": 2.4, "order": 6 },
+            { "id": "am7", "name": "Diziler", "averageQuestionCount": 1.4, "order": 7 },
+            { "id": "am8", "name": "Limit ve Süreklilik", "averageQuestionCount": 1.2, "order": 8 },
+            { "id": "am9", "name": "Türev", "averageQuestionCount": 2.2, "order": 9 },
+            { "id": "am10", "name": "İntegral", "averageQuestionCount": 2.4, "order": 10 },
+            { "id": "am11", "name": "Geometri", "averageQuestionCount": 9.2, "order": 11 }
+          ]
+        },
+        {
+          "id": "ayt_fizik",
+          "name": "Fizik",
+          "questionCount": 14,
+          "fieldType": "sayisal",
+          "topics": [
+            { "id": "af1", "name": "Vektörler", "averageQuestionCount": 0.5, "order": 1 },
+            { "id": "af2", "name": "Kuvvet ve Hareket", "averageQuestionCount": 2.5, "order": 2 },
+            { "id": "af3", "name": "Elektrik ve Manyetizma", "averageQuestionCount": 3.5, "order": 3 },
+            { "id": "af4", "name": "Dalgalar", "averageQuestionCount": 2.0, "order": 4 },
+            { "id": "af5", "name": "Modern Fizik", "averageQuestionCount": 2.5, "order": 5 },
+            { "id": "af6", "name": "Diğer Konular", "averageQuestionCount": 3.0, "order": 6 }
+          ]
+        },
+        {
+          "id": "ayt_kimya",
+          "name": "Kimya",
+          "questionCount": 13,
+          "fieldType": "sayisal",
+          "topics": [
+            { "id": "ak1", "name": "Modern Atom Teorisi", "averageQuestionCount": 2.0, "order": 1 },
+            { "id": "ak2", "name": "Kimyasal Tepkimeler", "averageQuestionCount": 2.5, "order": 2 },
+            { "id": "ak3", "name": "Organik Kimya", "averageQuestionCount": 4.0, "order": 3 },
+            { "id": "ak4", "name": "Elektrokimya", "averageQuestionCount": 1.5, "order": 4 },
+            { "id": "ak5", "name": "Çözünürlük Dengesi", "averageQuestionCount": 1.5, "order": 5 },
+            { "id": "ak6", "name": "Diğer Konular", "averageQuestionCount": 1.5, "order": 6 }
+          ]
+        },
+        {
+          "id": "ayt_biyoloji",
+          "name": "Biyoloji",
+          "questionCount": 13,
+          "fieldType": "sayisal",
+          "topics": [
+            { "id": "ab1", "name": "Hücre Bölünmesi", "averageQuestionCount": 1.5, "order": 1 },
+            { "id": "ab2", "name": "Kalıtım", "averageQuestionCount": 2.5, "order": 2 },
+            { "id": "ab3", "name": "Ekosistem", "averageQuestionCount": 1.5, "order": 3 },
+            { "id": "ab4", "name": "Bitki Biyolojisi", "averageQuestionCount": 2.0, "order": 4 },
+            { "id": "ab5", "name": "Canlılar ve Çevre", "averageQuestionCount": 2.0, "order": 5 },
+            { "id": "ab6", "name": "Diğer Konular", "averageQuestionCount": 3.5, "order": 6 }
+          ]
+        },
+        {
+          "id": "ayt_matematik_ea",
+          "name": "Matematik",
+          "questionCount": 40,
+          "fieldType": "esitAgirlik",
+          "topics": [
+            { "id": "am1", "name": "Temel Kavramlar", "averageQuestionCount": 4.8, "order": 1 },
+            { "id": "am2", "name": "Fonksiyonlar", "averageQuestionCount": 2.5, "order": 2 },
+            { "id": "am3", "name": "Polinomlar", "averageQuestionCount": 1.4, "order": 3 },
+            { "id": "am4", "name": "İkinci Dereceden Denklemler", "averageQuestionCount": 2.4, "order": 4 },
+            { "id": "am5", "name": "Trigonometri", "averageQuestionCount": 3.0, "order": 5 },
+            { "id": "am6", "name": "Logaritma", "averageQuestionCount": 2.4, "order": 6 },
+            { "id": "am7", "name": "Diziler", "averageQuestionCount": 1.4, "order": 7 },
+            { "id": "am8", "name": "Limit ve Süreklilik", "averageQuestionCount": 1.2, "order": 8 },
+            { "id": "am9", "name": "Türev", "averageQuestionCount": 2.2, "order": 9 },
+            { "id": "am10", "name": "İntegral", "averageQuestionCount": 2.4, "order": 10 },
+            { "id": "am11", "name": "Geometri", "averageQuestionCount": 9.2, "order": 11 }
+          ]
+        },
+        {
+          "id": "ayt_edebiyat",
+          "name": "Türk Dili ve Edebiyatı",
+          "questionCount": 24,
+          "fieldType": "esitAgirlik",
+          "topics": [
+            { "id": "ae1", "name": "Sözcükte Anlam", "averageQuestionCount": 1.0, "order": 1 },
+            { "id": "ae2", "name": "Cümlede Anlam", "averageQuestionCount": 1.0, "order": 2 },
+            { "id": "ae3", "name": "Paragrafta Anlam", "averageQuestionCount": 4.0, "order": 3 },
+            { "id": "ae4", "name": "Şiir Bilgisi", "averageQuestionCount": 1.8, "order": 4 },
+            { "id": "ae5", "name": "Söz Sanatları", "averageQuestionCount": 1.4, "order": 5 },
+            { "id": "ae6", "name": "Nesir Bilgisi", "averageQuestionCount": 1.4, "order": 6 },
+            { "id": "ae7", "name": "İslamiyet Öncesi / Geçiş Dönemi Türk Edebiyatı", "averageQuestionCount": 0.6, "order": 7 },
+            { "id": "ae8", "name": "Halk Edebiyatı", "averageQuestionCount": 1.2, "order": 8 },
+            { "id": "ae9", "name": "Divan Edebiyatı", "averageQuestionCount": 4.0, "order": 9 },
+            { "id": "ae10", "name": "Tanzimat Dönemi Türk Edebiyatı", "averageQuestionCount": 1.0, "order": 10 },
+            { "id": "ae11", "name": "Servetifünun / Fecriâti Dönemi", "averageQuestionCount": 1.2, "order": 11 },
+            { "id": "ae12", "name": "Millî Edebiyat Dönemi", "averageQuestionCount": 0.6, "order": 12 },
+            { "id": "ae13", "name": "Cumhuriyet Dönemi Türk Edebiyatı", "averageQuestionCount": 2.6, "order": 13 },
+            { "id": "ae14", "name": "Edebî Akımlar", "averageQuestionCount": 1.0, "order": 14 }
+          ]
+        },
+        {
+          "id": "ayt_tarih",
+          "name": "Tarih",
+          "questionCount": 10,
+          "fieldType": "esitAgirlik",
+          "topics": [
+            { "id": "at1", "name": "İlk Çağ'da Başlıca Medeniyet Havzaları", "averageQuestionCount": 0.8, "order": 1 },
+            { "id": "at2", "name": "Boylardan Devlete", "averageQuestionCount": 0.8, "order": 2 },
+            { "id": "at3", "name": "İslamiyet Yayılıyor", "averageQuestionCount": 0.8, "order": 3 },
+            { "id": "at4", "name": "Abbasi Devleti ve Türkler", "averageQuestionCount": 0.6, "order": 4 },
+            { "id": "at5", "name": "Osmanlı Devleti'nin Rumeli'deki İskân Politikası", "averageQuestionCount": 0.4, "order": 5 },
+            { "id": "at6", "name": "Kanunlar Doğuyor", "averageQuestionCount": 0.2, "order": 6 },
+            { "id": "at7", "name": "Devletleşme Sürecinde Osmanlı-Bizans İlişkileri", "averageQuestionCount": 0.2, "order": 7 }
+          ]
+        },
+        {
+          "id": "ayt_cografya",
+          "name": "Coğrafya",
+          "questionCount": 6,
+          "fieldType": "esitAgirlik",
+          "topics": [
+            { "id": "ac1", "name": "Ekosistemlerin Özellikleri ve İşleyişi", "averageQuestionCount": 0.4, "order": 1 },
+            { "id": "ac2", "name": "Ekstrem Doğa Olayları", "averageQuestionCount": 0.6, "order": 2 },
+            { "id": "ac3", "name": "Şehirler ve Kırsal Yerleşmeler", "averageQuestionCount": 0.8, "order": 3 },
+            { "id": "ac4", "name": "Çevre Sorunları ve Geri Dönüşüm", "averageQuestionCount": 1.0, "order": 4 },
+            { "id": "ac5", "name": "Nüfus Politikaları ve Projeksiyonları", "averageQuestionCount": 0.4, "order": 5 },
+            { "id": "ac6", "name": "Kültür Bölgeleri ve Türk Kültürü", "averageQuestionCount": 0.4, "order": 6 },
+            { "id": "ac7", "name": "Uluslararası Örgütler", "averageQuestionCount": 0.4, "order": 7 }
+          ]
+        },
+        {
+          "id": "ayt_tarih2",
+          "name": "Tarih-2",
+          "questionCount": 10,
+          "fieldType": "sozel",
+          "topics": [
+            { "id": "at21", "name": "İstanbul'un Fethi ve Fethin Sonuçları", "averageQuestionCount": 0.4, "order": 1 },
+            { "id": "at22", "name": "Avrupa'da Değişim Çağı", "averageQuestionCount": 0.6, "order": 2 },
+            { "id": "at23", "name": "Osmanlı Devleti'nde Modern Orduya Geçiş", "averageQuestionCount": 0.4, "order": 3 },
+            { "id": "at24", "name": "Mustafa Kemal'in Lider Olarak Yetişmesi", "averageQuestionCount": 0.4, "order": 4 },
+            { "id": "at25", "name": "İhtilaller Çağı", "averageQuestionCount": 0.2, "order": 5 },
+            { "id": "at26", "name": "I. Dünya Savaşı'nın Sonuçları", "averageQuestionCount": 0.2, "order": 6 }
+          ]
+        },
+        {
+          "id": "ayt_cografya2",
+          "name": "Coğrafya-2",
+          "questionCount": 11,
+          "fieldType": "sozel",
+          "topics": [
+            { "id": "ac21", "name": "Ekosistemlerin Özellikleri ve İşleyişi", "averageQuestionCount": 1.2, "order": 1 },
+            { "id": "ac22", "name": "Türkiye'de Tarım, Sanayi, Maden ve Enerji Kaynakları", "averageQuestionCount": 1.2, "order": 2 },
+            { "id": "ac23", "name": "Çevre Sorunları ve Geri Dönüşüm", "averageQuestionCount": 1.2, "order": 3 },
+            { "id": "ac24", "name": "Ekonomi, Şehirleşme ve Göç", "averageQuestionCount": 1.0, "order": 4 },
+            { "id": "ac25", "name": "Küreselleşen Dünya", "averageQuestionCount": 0.8, "order": 5 },
+            { "id": "ac26", "name": "Dünyada Doğal Kaynak ve Ekonomi", "averageQuestionCount": 0.8, "order": 6 },
+            { "id": "ac27", "name": "Ekstrem Doğa Olayları", "averageQuestionCount": 0.8, "order": 7 }
+          ]
+        },
+        {
+          "id": "ayt_felsefe",
+          "name": "Felsefe",
+          "questionCount": 12,
+          "fieldType": "sozel",
+          "topics": [
+            { "id": "af1", "name": "20. Yüzyıl Felsefesinde Bazı Ana Akımlar", "averageQuestionCount": 1.2, "order": 1 },
+            { "id": "af2", "name": "Felsefi Düşüncenin Ortaya Çıkışı ve Özellikleri", "averageQuestionCount": 0.8, "order": 2 },
+            { "id": "af3", "name": "15-17. Yüzyıl Felsefesinde Öne Çıkan Görüşler", "averageQuestionCount": 0.6, "order": 3 },
+            { "id": "af4", "name": "Sofistler ile Sokrates'in Bilgi ve Değer Anlayışları", "averageQuestionCount": 0.4, "order": 4 },
+            { "id": "af5", "name": "Platon ve Aristoteles'in Varlık, Bilgi ve Değer Anlayışı", "averageQuestionCount": 0.4, "order": 5 },
+            { "id": "af6", "name": "Bilginin Sınırları, Ölçütü, Doğruluk ve Gerçeklik", "averageQuestionCount": 0.4, "order": 6 }
+          ]
+        },
+        {
+          "id": "ayt_din",
+          "name": "Din Kültürü",
+          "questionCount": 7,
+          "fieldType": "sozel",
+          "topics": [
+            { "id": "ad1", "name": "İnançla İlgili Felsefi Yaklaşımlar", "averageQuestionCount": 0.6, "order": 1 },
+            { "id": "ad2", "name": "Müslümanların Bilim Alanında Yaptığı Çalışmalar", "averageQuestionCount": 0.6, "order": 2 },
+            { "id": "ad3", "name": "İslam'da İbadet Yükümlülüğü", "averageQuestionCount": 0.4, "order": 3 },
+            { "id": "ad4", "name": "Allah'ın İsim ve Sıfatları", "averageQuestionCount": 0.4, "order": 4 },
+            { "id": "ad5", "name": "Hz. Muhammed'in Peygamberlik Yönü", "averageQuestionCount": 0.4, "order": 5 },
+            { "id": "ad6", "name": "Türklerin Müslüman Olmaları", "averageQuestionCount": 0.4, "order": 6 }
+          ]
+        }
+      ]
+    }
+  ]
+}

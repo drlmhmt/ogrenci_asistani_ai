@@ -73,4 +73,20 @@ class AuthService {
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
+  /// Giriş yapan kullanıcının adını döndürür (Firebase Auth veya Firestore'dan)
+  Future<String?> getDisplayName() async {
+    final user = currentUser;
+    if (user == null) return null;
+    if (user.displayName != null && user.displayName!.trim().isNotEmpty) {
+      return user.displayName!.trim();
+    }
+    try {
+      final doc = await _firestore.collection('users').doc(user.uid).get();
+      final name = doc.data()?['displayName'] as String?;
+      return name?.trim();
+    } catch (_) {
+      return null;
+    }
+  }
 }
