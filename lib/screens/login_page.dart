@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
-import 'ana_ekran.dart';
+import 'forgot_password_page.dart';
 import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -37,9 +37,12 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text,
       );
       if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const AnaEkran()),
+      _passwordController.clear();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Giriş başarılı.'),
+          backgroundColor: Color(0xFF166534),
+        ),
       );
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
@@ -171,13 +174,37 @@ class _LoginPageState extends State<LoginPage> {
                           : const Text('Giriş yap', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
+                        );
+                      },
+                      child: Text(
+                        'Şifremi unuttum',
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 14),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   TextButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      final registered = await Navigator.push<bool>(
                         context,
                         MaterialPageRoute(builder: (context) => const RegisterPage()),
                       );
+                      if (!context.mounted) return;
+                      if (registered == true) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Kayıt tamamlandı. Giriş yapabilirsiniz.'),
+                            backgroundColor: Color(0xFF166534),
+                          ),
+                        );
+                      }
                     },
                     child: Text(
                       'Hesabınız yok mu? Kayıt olun',

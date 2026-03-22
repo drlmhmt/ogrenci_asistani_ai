@@ -4,8 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 /// Giriş ve kayıt işlemleri Firebase Auth + Firestore ile yapılır.
 /// Firebase Console → Authentication → Sign-in method → E-posta/Parola'yı etkinleştirmen gerekir.
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  FirebaseAuth get _auth => FirebaseAuth.instance;
+
+  FirebaseFirestore get _firestore => FirebaseFirestore.instance;
 
   User? get currentUser => _auth.currentUser;
 
@@ -67,6 +68,11 @@ class AuthService {
         'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
     } catch (_) {}
+  }
+
+  /// Şifre sıfırlama e-postası (Firebase Auth)
+  Future<void> sendPasswordResetEmail(String email) async {
+    await _auth.sendPasswordResetEmail(email: email.trim());
   }
 
   /// Çıkış

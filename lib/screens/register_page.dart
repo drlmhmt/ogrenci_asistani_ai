@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
-import 'ana_ekran.dart';
 import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -40,11 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
         displayName: _nameController.text.trim(),
       );
       if (!mounted) return;
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const AnaEkran()),
-        (route) => false,
-      );
+      Navigator.pop(context, true);
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
       String message = 'Kayıt oluşturulamadı.';
