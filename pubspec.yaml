@@ -34,3 +34,8 @@ flutter_launcher_icons:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/Logo.png
+    - assets/onboarding/onboarding1.png
+    - assets/onboarding/onboarding2.png
+    - assets/onboarding/onboarding3.png
