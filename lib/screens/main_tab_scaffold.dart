@@ -78,8 +78,8 @@ class _AppTabBar extends StatelessWidget {
   final ValueChanged<int> onTap;
 
   static const _barColor = Color(0xFF061634);
-  static const _baseHeight = 78.0;
-  static const _mentorButtonSize = 72.0;
+  static const _baseHeight = 72.0;
+  static const _mentorButtonSize = 64.0;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +108,7 @@ class _AppTabBar extends StatelessWidget {
                   ],
                 ),
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(12, 10, 12, 10 + bottomPad),
+                  padding: EdgeInsets.fromLTRB(12, 8, 12, 8 + bottomPad),
                   child: Center(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -227,35 +227,36 @@ class _MentorButton extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Align(
-                  alignment: const Alignment(0, -0.08),
-                  child: Image.asset(
-                    'assets/mentorai.png',
-                    width: size * 1.18,
-                    height: size * 1.18,
-                    fit: BoxFit.contain,
-                    filterQuality: FilterQuality.high,
-                    errorBuilder: (context, error, stackTrace) => Icon(
-                      Icons.smart_toy_rounded,
-                      size: 40,
-                      color: Colors.white.withValues(alpha: 0.95),
+                Center(
+                  child: Transform.scale(
+                    scale: 1.45,
+                    child: Image.asset(
+                      'assets/mentorai.png',
+                      fit: BoxFit.contain,
+                      alignment: Alignment.center,
+                      filterQuality: FilterQuality.high,
+                      errorBuilder: (context, error, stackTrace) => Icon(
+                        Icons.smart_toy_rounded,
+                        size: 40,
+                        color: Colors.white.withValues(alpha: 0.95),
+                      ),
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 7),
-                    child: Text(
-                      'Mentor AI',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.95),
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -0.2,
-                      ),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 7,
+                  child: Text(
+                    'Mentor AI',
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.95),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.2,
                     ),
                   ),
                 ),
