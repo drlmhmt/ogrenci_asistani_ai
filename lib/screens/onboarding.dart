@@ -17,21 +17,21 @@ class _OnboardingPageState extends State<OnboardingPage> {
   static const List<_OnboardingSlide> _slides = [
     _OnboardingSlide(
       assetPath: 'assets/onboarding/onboarding1.png',
-      title: 'Çalışmanı akıllıca planla',
+      title: 'Calismani akillica planla',
       description:
-          'Yapay zeka destekli asistanınla daha düzenli çalış, potansiyelini ortaya çıkar.',
+          'Yapay zeka destekli asistaninla daha duzenli calis, potansiyelini ortaya cikar.',
     ),
     _OnboardingSlide(
       assetPath: 'assets/onboarding/onboarding2.png',
-      title: 'Gelişimini takip et',
+      title: 'Gelisimini takip et',
       description:
-          'Yapay zeka analizleriyle nasıl çalıştığını keşfet, daha verimli ilerle ve hedeflerine ulaş.',
+          'Yapay zeka analizleriyle nasil calistigini kesfet, daha verimli ilerle ve hedeflerine ulas.',
     ),
     _OnboardingSlide(
       assetPath: 'assets/onboarding/onboarding3.png',
-      title: 'Kişisel sistemini kur',
+      title: 'Kisisel sistemini kur',
       description:
-          'Hedeflerine özel optimize edilmiş yapay zeka destekli çalışma programın seni bekliyor.',
+          'Hedeflerine ozel optimize edilmis yapay zeka destekli calisma programin seni bekliyor.',
     ),
   ];
 
@@ -58,6 +58,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
     );
   }
 
+  Future<void> _previousStep() async {
+    if (_currentPage == 0) {
+      return;
+    }
+
+    await _pageController.previousPage(
+      duration: const Duration(milliseconds: 320),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
   void _skip() {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => const LoginPage()),
@@ -66,83 +77,121 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLastPage = _currentPage == _slides.length - 1;
+
     return Scaffold(
       backgroundColor: const Color(0xFF07111F),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: TextButton(
-                  onPressed: _skip,
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.white.withValues(alpha: 0.9),
-                    textStyle: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  child: const Text('Geç'),
-                ),
-              ),
-              Expanded(
-                child: PageView.builder(
-                  controller: _pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _slides.length,
-                  onPageChanged: (index) {
-                    setState(() => _currentPage = index);
-                  },
-                  itemBuilder: (context, index) {
-                    return _OnboardingSlideView(slide: _slides[index]);
-                  },
-                ),
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  _slides.length,
-                  (index) => AnimatedContainer(
-                    duration: const Duration(milliseconds: 220),
-                    curve: Curves.easeOut,
-                    margin: const EdgeInsets.symmetric(horizontal: 5),
-                    width: _currentPage == index ? 28 : 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: _currentPage == index
-                          ? const Color(0xFFFFFFFF)
-                          : const Color(0x66FFFFFF),
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: _nextStep,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF08111D),
-                    padding: const EdgeInsets.symmetric(vertical: 18),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(22),
-                    ),
-                    textStyle: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  child: Text(
-                    _currentPage == _slides.length - 1 ? 'Başla' : 'İleri',
-                  ),
-                ),
-              ),
+      body: DecoratedBox(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF11233B),
+              Color(0xFF07111F),
             ],
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: TextButton(
+                    onPressed: _skip,
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white.withValues(alpha: 0.9),
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    child: const Text('Gec'),
+                  ),
+                ),
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: _slides.length,
+                    onPageChanged: (index) {
+                      setState(() => _currentPage = index);
+                    },
+                    itemBuilder: (context, index) {
+                      return _OnboardingSlideView(slide: _slides[index]);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                    _slides.length,
+                    (index) => AnimatedContainer(
+                      duration: const Duration(milliseconds: 220),
+                      curve: Curves.easeOut,
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
+                      width: _currentPage == index ? 28 : 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: _currentPage == index
+                            ? const Color(0xFFFFFFFF)
+                            : const Color(0x66FFFFFF),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    AnimatedOpacity(
+                      opacity: _currentPage == 0 ? 0 : 1,
+                      duration: const Duration(milliseconds: 180),
+                      child: IgnorePointer(
+                        ignoring: _currentPage == 0,
+                        child: OutlinedButton(
+                          onPressed: _previousStep,
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            side: const BorderSide(color: Color(0x33FFFFFF)),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 18,
+                              vertical: 18,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(22),
+                            ),
+                          ),
+                          child: const Text('Geri'),
+                        ),
+                      ),
+                    ),
+                    if (_currentPage != 0) const SizedBox(width: 12),
+                    Expanded(
+                      child: FilledButton(
+                        onPressed: _nextStep,
+                        style: FilledButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: const Color(0xFF08111D),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(22),
+                          ),
+                          textStyle: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        child: Text(isLastPage ? 'Basla' : 'Ileri'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -157,6 +206,8 @@ class _OnboardingSlideView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       children: [
         Expanded(
@@ -235,33 +286,34 @@ class _OnboardingSlideView extends StatelessWidget {
         Expanded(
           flex: 3,
           child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    slide.title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 31,
-                      fontWeight: FontWeight.w800,
-                      height: 1.1,
-                      letterSpacing: -0.4,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 440),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      slide.title,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        height: 1.1,
+                        letterSpacing: -0.4,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 14),
-                  Text(
-                    slide.description,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Color(0xCCFFFFFF),
-                      fontSize: 16,
-                      height: 1.55,
+                    const SizedBox(height: 14),
+                    Text(
+                      slide.description,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: const Color(0xCCFFFFFF),
+                        height: 1.55,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
