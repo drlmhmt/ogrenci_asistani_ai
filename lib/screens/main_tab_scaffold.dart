@@ -108,61 +108,57 @@ class _AppTabBar extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(12, 10, 12, 10 + bottomPad),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _TabItem(
-                          index: 0,
-                          label: 'Ana Sayfa',
-                          selected: currentIndex == 0,
-                          selectedAsset: 'assets/tab/home_selected.png',
-                          unselectedAsset: 'assets/tab/home_unselected.png',
-                          fallbackIcon: Icons.home_rounded,
-                          onTap: onTap,
+                  child: Center(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: _TabItem(
+                            index: 0,
+                            label: 'Ana Sayfa',
+                            selected: currentIndex == 0,
+                            selectedAsset: 'assets/tab/home_selected.png',
+                            unselectedAsset: 'assets/tab/home_unselected.png',
+                            fallbackIcon: Icons.home_rounded,
+                            onTap: onTap,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: _TabItem(
-                          index: 1,
-                          label: 'Plan',
-                          selected: currentIndex == 1,
-                          selectedAsset: 'assets/tab/plan_selected.png',
-                          unselectedAsset: 'assets/tab/plan_unselected.png',
-                          fallbackIcon: Icons.fact_check_rounded,
-                          onTap: onTap,
+                        Expanded(
+                          child: _TabItem(
+                            index: 1,
+                            label: 'Plan',
+                            selected: currentIndex == 1,
+                            selectedAsset: 'assets/tab/plan_selected.png',
+                            unselectedAsset: 'assets/tab/plan_unselected.png',
+                            fallbackIcon: Icons.fact_check_rounded,
+                            onTap: onTap,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: _TabLabel(
-                          label: 'Mentor AI',
-                          selected: currentIndex == 2,
-                          onTap: () => onTap(2),
-                          icon: const SizedBox(width: 24, height: 24),
+                        const Expanded(child: SizedBox.shrink()),
+                        Expanded(
+                          child: _TabItem(
+                            index: 3,
+                            label: 'Analiz',
+                            selected: currentIndex == 3,
+                            selectedAsset: 'assets/tab/analysis_selected.png',
+                            unselectedAsset: 'assets/tab/analysis_unselected.png',
+                            fallbackIcon: Icons.show_chart_rounded,
+                            onTap: onTap,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: _TabItem(
-                          index: 3,
-                          label: 'Analiz',
-                          selected: currentIndex == 3,
-                          selectedAsset: 'assets/tab/analysis_selected.png',
-                          unselectedAsset: 'assets/tab/analysis_unselected.png',
-                          fallbackIcon: Icons.show_chart_rounded,
-                          onTap: onTap,
+                        Expanded(
+                          child: _TabItem(
+                            index: 4,
+                            label: 'Profil',
+                            selected: currentIndex == 4,
+                            selectedAsset: 'assets/tab/profile_selected.png',
+                            unselectedAsset: 'assets/tab/profile_unselected.png',
+                            fallbackIcon: Icons.person_rounded,
+                            onTap: onTap,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: _TabItem(
-                          index: 4,
-                          label: 'Profil',
-                          selected: currentIndex == 4,
-                          selectedAsset: 'assets/tab/profile_selected.png',
-                          unselectedAsset: 'assets/tab/profile_unselected.png',
-                          fallbackIcon: Icons.person_rounded,
-                          onTap: onTap,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -171,7 +167,7 @@ class _AppTabBar extends StatelessWidget {
           Align(
             alignment: Alignment.topCenter,
             child: Transform.translate(
-              offset: const Offset(0, -20),
+              offset: const Offset(0, -34),
               child: _MentorButton(
                 selected: currentIndex == 2,
                 onTap: () => onTap(2),
@@ -201,8 +197,8 @@ class _MentorButton extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(999),
         child: Container(
-          width: 72,
-          height: 72,
+          width: 92,
+          height: 92,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: const LinearGradient(
@@ -222,18 +218,39 @@ class _MentorButton extends StatelessWidget {
               ),
             ],
           ),
-          child: Center(
-            child: Image.asset(
-              'assets/mentorai.png',
-              width: 54,
-              height: 54,
-              fit: BoxFit.contain,
-              filterQuality: FilterQuality.high,
-              errorBuilder: (context, error, stackTrace) => Icon(
-                Icons.smart_toy_rounded,
-                size: 38,
-                color: Colors.white.withValues(alpha: 0.95),
-              ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 14, 10, 12),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Image.asset(
+                      'assets/mentorai.png',
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.contain,
+                      filterQuality: FilterQuality.high,
+                      errorBuilder: (context, error, stackTrace) => Icon(
+                        Icons.smart_toy_rounded,
+                        size: 40,
+                        color: Colors.white.withValues(alpha: 0.95),
+                      ),
+                    ),
+                  ),
+                ),
+                Text(
+                  'Mentor AI',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.95),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.2,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -269,12 +286,12 @@ class _TabItem extends StatelessWidget {
       onTap: () => onTap(index),
       icon: Image.asset(
         selected ? selectedAsset : unselectedAsset,
-        width: 24,
-        height: 24,
+        width: 30,
+        height: 30,
         fit: BoxFit.contain,
         errorBuilder: (context, error, stackTrace) => Icon(
           fallbackIcon,
-          size: 24,
+          size: 30,
           color: selected
               ? const Color(0xFF2B7BFF)
               : Colors.white.withValues(alpha: 0.82),
@@ -309,7 +326,7 @@ class _TabLabel extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(18),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -318,7 +335,7 @@ class _TabLabel extends StatelessWidget {
                   data: IconThemeData(color: color),
                   child: icon!,
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
               ],
               Text(
                 label,
@@ -326,7 +343,7 @@ class _TabLabel extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: color,
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.2,
                 ),
