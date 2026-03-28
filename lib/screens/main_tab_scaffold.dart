@@ -78,8 +78,8 @@ class _AppTabBar extends StatelessWidget {
   final ValueChanged<int> onTap;
 
   static const _barColor = Color(0xFF061634);
-  static const _baseHeight = 90.0;
-  static const _mentorButtonSize = 88.0;
+  static const _baseHeight = 78.0;
+  static const _mentorButtonSize = 72.0;
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +200,7 @@ class _MentorButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(999),
+        customBorder: const CircleBorder(),
         child: Container(
           width: size,
           height: size,
@@ -223,13 +223,16 @@ class _MentorButton extends StatelessWidget {
               ),
             ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(6, 8, 6, 8),
-            child: Column(
+          child: ClipOval(
+            child: Stack(
+              fit: StackFit.expand,
               children: [
-                Expanded(
+                Align(
+                  alignment: const Alignment(0, -0.08),
                   child: Image.asset(
                     'assets/mentorai.png',
+                    width: size * 1.18,
+                    height: size * 1.18,
                     fit: BoxFit.contain,
                     filterQuality: FilterQuality.high,
                     errorBuilder: (context, error, stackTrace) => Icon(
@@ -239,15 +242,21 @@ class _MentorButton extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  'Mentor AI',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.95),
-                    fontSize: 11,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: -0.2,
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 7),
+                    child: Text(
+                      'Mentor AI',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.95),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.2,
+                      ),
+                    ),
                   ),
                 ),
               ],
