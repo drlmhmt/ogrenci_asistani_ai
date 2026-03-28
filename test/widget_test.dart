@@ -13,11 +13,16 @@ void main() {
   });
 
   testWidgets('Login page shows primary actions', (WidgetTester tester) async {
-    await tester.pumpWidget(const MaterialApp(home: LoginPage()));
+    await tester.binding.setSurfaceSize(const Size(430, 932));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    expect(find.text('Bilgi AI'), findsOneWidget);
-    expect(find.text('Giriş yap'), findsOneWidget);
-    expect(find.text('Şifremi unuttum'), findsOneWidget);
-    expect(find.text('Hesabınız yok mu? Kayıt olun'), findsOneWidget);
+    await tester.pumpWidget(const MaterialApp(home: LoginPage()));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Merhaba!'), findsOneWidget);
+    expect(find.text('Giriş Yap'), findsWidgets);
+    expect(find.text('Şifremi Unuttum'), findsOneWidget);
+    expect(find.textContaining('Henüz hesabın yok mu'), findsOneWidget);
+    expect(find.text('Kayıt ol'), findsOneWidget);
   });
 }
