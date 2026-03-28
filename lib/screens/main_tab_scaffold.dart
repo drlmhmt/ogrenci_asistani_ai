@@ -78,7 +78,8 @@ class _AppTabBar extends StatelessWidget {
   final ValueChanged<int> onTap;
 
   static const _barColor = Color(0xFF061634);
-  static const _baseHeight = 78.0;
+  static const _baseHeight = 90.0;
+  static const _mentorButtonSize = 88.0;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +89,7 @@ class _AppTabBar extends StatelessWidget {
     return SizedBox(
       height: totalHeight,
       child: Stack(
-        clipBehavior: Clip.none,
+        clipBehavior: Clip.hardEdge,
         children: [
           Positioned.fill(
             child: ClipRRect(
@@ -164,11 +165,13 @@ class _AppTabBar extends StatelessWidget {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Transform.translate(
-              offset: const Offset(0, -34),
+          Positioned(
+            top: (_baseHeight - _mentorButtonSize) / 2,
+            left: 0,
+            right: 0,
+            child: Center(
               child: _MentorButton(
+                size: _mentorButtonSize,
                 selected: currentIndex == 2,
                 onTap: () => onTap(2),
               ),
@@ -182,10 +185,12 @@ class _AppTabBar extends StatelessWidget {
 
 class _MentorButton extends StatelessWidget {
   const _MentorButton({
+    required this.size,
     required this.selected,
     required this.onTap,
   });
 
+  final double size;
   final bool selected;
   final VoidCallback onTap;
 
@@ -197,8 +202,8 @@ class _MentorButton extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(999),
         child: Container(
-          width: 92,
-          height: 92,
+          width: size,
+          height: size,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: const LinearGradient(
@@ -213,29 +218,24 @@ class _MentorButton extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: const Color(0xFF068EFF).withValues(alpha: 0.26),
-                blurRadius: 26,
-                offset: const Offset(0, 12),
+                blurRadius: 18,
+                offset: const Offset(0, 14),
               ),
             ],
           ),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 14, 10, 12),
+            padding: const EdgeInsets.fromLTRB(6, 8, 6, 8),
             child: Column(
               children: [
                 Expanded(
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Image.asset(
-                      'assets/mentorai.png',
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.contain,
-                      filterQuality: FilterQuality.high,
-                      errorBuilder: (context, error, stackTrace) => Icon(
-                        Icons.smart_toy_rounded,
-                        size: 40,
-                        color: Colors.white.withValues(alpha: 0.95),
-                      ),
+                  child: Image.asset(
+                    'assets/mentorai.png',
+                    fit: BoxFit.contain,
+                    filterQuality: FilterQuality.high,
+                    errorBuilder: (context, error, stackTrace) => Icon(
+                      Icons.smart_toy_rounded,
+                      size: 40,
+                      color: Colors.white.withValues(alpha: 0.95),
                     ),
                   ),
                 ),
@@ -245,7 +245,7 @@ class _MentorButton extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.95),
-                    fontSize: 12,
+                    fontSize: 11,
                     fontWeight: FontWeight.w800,
                     letterSpacing: -0.2,
                   ),
