@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'screens/home.dart';
 import 'screens/login_page.dart';
+import 'screens/main_tab_scaffold.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +39,7 @@ class _AuthGate extends StatelessWidget {
         if (user == null) {
           return const LoginPage();
         }
-        return const HomePage();
+        return const MainTabScaffold();
       },
     );
   }

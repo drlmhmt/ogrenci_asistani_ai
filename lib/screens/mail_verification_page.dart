@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../widgets/top_alert.dart'; // TopAlert dosyanın yolu
-import 'home.dart';
 import 'login_page.dart';
+import 'main_tab_scaffold.dart';
 
 enum MailVerificationFlow { registerEmail, passwordReset }
 
@@ -104,7 +104,7 @@ class _MailVerificationPageState extends State<MailVerificationPage>
     if (!mounted) return;
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (_) => const HomePage()),
+      MaterialPageRoute(builder: (_) => const MainTabScaffold()),
       (route) => false,
     );
   }
