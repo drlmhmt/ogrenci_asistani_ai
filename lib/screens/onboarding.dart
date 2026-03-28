@@ -111,7 +111,11 @@ class _OnboardingPageState extends State<OnboardingPage> {
               itemCount: _slides.length,
               onPageChanged: (index) => setState(() => _currentPage = index),
               itemBuilder: (context, index) {
-                return _OnboardingBackground(assetPath: _slides[index].assetPath);
+                final bg = _slides[index];
+                return _OnboardingBackground(
+                  assetPath: bg.assetPath,
+                  accentColor: Color.lerp(bg.accentA, bg.accentB, 0.6)!,
+                );
               },
             ),
           ),
@@ -125,19 +129,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
+                  begin: const Alignment(-0.10, -1),
+                  end: const Alignment(0.10, 1),
                   colors: [
                     const Color(0x00061022),
-                    Color.lerp(
-                      Color.lerp(slide.accentA, slide.accentB, 0.65),
-                      const Color(0xFF061022),
-                      0.62,
-                    )!
-                        .withValues(alpha: 0.60),
-                    const Color(0xFF061022).withValues(alpha: 0.96),
+                    Color.lerp(slide.accentA, slide.accentB, 0.65)!
+                        .withValues(alpha: 0.10),
+                    const Color(0xFF061022).withValues(alpha: 0.78),
+                    const Color(0xFF061022).withValues(alpha: 0.98),
                   ],
-                  stops: const [0.0, 0.66, 1.0],
                 ),
               ),
             ),
@@ -229,11 +229,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
 }
 
 class _OnboardingBackground extends StatelessWidget {
-  const _OnboardingBackground({required this.assetPath});
+  const _OnboardingBackground({
+    required this.assetPath,
+    required this.accentColor,
+  });
 
   final String assetPath;
+  final Color accentColor;
 
-  static final List<double> _vividMatrix = _saturationMatrix(1.22);
+  static final List<double> _vividMatrix = _saturationMatrix(1.10);
 
   static List<double> _saturationMatrix(double saturation) {
     final invSat = 1 - saturation;
@@ -286,13 +290,19 @@ class _OnboardingBackground extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 child: ColorFiltered(
                   colorFilter: ColorFilter.matrix(_vividMatrix),
-                  child: Image.asset(
-                    assetPath,
-                    fit: BoxFit.cover,
-                    alignment: Alignment.topCenter,
-                    filterQuality: FilterQuality.high,
-                    isAntiAlias: true,
-                    gaplessPlayback: true,
+                  child: ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                      accentColor.withValues(alpha: 0.10),
+                      BlendMode.softLight,
+                    ),
+                    child: Image.asset(
+                      assetPath,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
+                      filterQuality: FilterQuality.high,
+                      isAntiAlias: true,
+                      gaplessPlayback: true,
+                    ),
                   ),
                 ),
               ),
@@ -432,7 +442,7 @@ class _VividGlows extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final w = constraints.maxWidth;
-          final glow = w * 0.95;
+          final glow = w * 0.80;
 
           return Stack(
             children: [
@@ -441,28 +451,28 @@ class _VividGlows extends StatelessWidget {
                 top: -glow * 0.30,
                 width: glow,
                 height: glow,
-                child: _RadialGlow(color: accentA, alpha: 0.40),
+                child: _RadialGlow(color: accentA, alpha: 0.22),
               ),
               Positioned(
                 right: -glow * 0.40,
                 top: -glow * 0.22,
                 width: glow * 0.9,
                 height: glow * 0.9,
-                child: _RadialGlow(color: accentB, alpha: 0.32),
+                child: _RadialGlow(color: accentB, alpha: 0.18),
               ),
               Positioned(
                 left: -glow * 0.10,
                 bottom: -glow * 0.55,
                 width: glow * 1.1,
                 height: glow * 1.1,
-                child: _RadialGlow(color: accentB, alpha: 0.26),
+                child: _RadialGlow(color: accentB, alpha: 0.16),
               ),
               Positioned(
                 right: -glow * 0.18,
                 bottom: -glow * 0.48,
                 width: glow,
                 height: glow,
-                child: _RadialGlow(color: accentA, alpha: 0.22),
+                child: _RadialGlow(color: accentA, alpha: 0.14),
               ),
             ],
           );
@@ -486,13 +496,12 @@ class _RadialGlow extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: RadialGradient(
+          radius: 0.95,
           colors: [
             color.withValues(alpha: alpha),
-            color.withValues(alpha: alpha * 0.24),
             Colors.transparent,
           ],
-          stops: const [0.0, 0.55, 1.0],
-          radius: 0.85,
+          stops: const [0.0, 1.0],
         ),
       ),
     );
