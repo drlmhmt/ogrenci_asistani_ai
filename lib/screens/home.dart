@@ -961,6 +961,7 @@ class _AiRecommendationCard extends StatelessWidget {
               _withAlpha(const Color(0xFF0B1731), 0.86),
             ],
           ),
+          borderRadius: BorderRadius.circular(36),
           border: Border.all(
             color: _withAlpha(const Color(0xFF93A8D8), 0.14),
           ),
@@ -1158,6 +1159,7 @@ class _FocusAreaCard extends StatelessWidget {
               _withAlpha(const Color(0xFF0B1731), 0.86),
             ],
           ),
+          borderRadius: BorderRadius.circular(28),
           border: Border.all(
             color: _withAlpha(const Color(0xFF93A8D8), 0.14),
           ),
@@ -1270,6 +1272,7 @@ class _StreakCard extends StatelessWidget {
               _withAlpha(const Color(0xFF0B1731), 0.88),
             ],
           ),
+          borderRadius: BorderRadius.circular(36),
           border: Border.all(
             color: _withAlpha(const Color(0xFF93A8D8), 0.14),
           ),
@@ -1358,6 +1361,7 @@ class _LastExamSummaryCard extends StatelessWidget {
               _withAlpha(const Color(0xFF0B1731), 0.90),
             ],
           ),
+          borderRadius: BorderRadius.circular(36),
           border: Border.all(
             color: _withAlpha(const Color(0xFF93A8D8), 0.14),
           ),
@@ -1501,6 +1505,7 @@ class _ExamPill extends StatelessWidget {
               _withAlpha(const Color(0xFF07122A), 0.72),
             ],
           ),
+          borderRadius: BorderRadius.circular(999),
           border: Border.all(
             color: _withAlpha(const Color(0xFF93A8D8), 0.14),
           ),
