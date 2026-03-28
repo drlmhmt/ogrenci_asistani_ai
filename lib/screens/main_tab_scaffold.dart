@@ -78,12 +78,12 @@ class _AppTabBar extends StatelessWidget {
   final ValueChanged<int> onTap;
 
   static const _barColor = Color(0xFF061634);
+  static const _baseHeight = 78.0;
 
   @override
   Widget build(BuildContext context) {
     final bottomPad = MediaQuery.paddingOf(context).bottom;
-    const baseHeight = 94.0;
-    final totalHeight = baseHeight + bottomPad;
+    final totalHeight = _baseHeight + bottomPad;
 
     return SizedBox(
       height: totalHeight,
@@ -107,7 +107,7 @@ class _AppTabBar extends StatelessWidget {
                   ],
                 ),
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(12, 14, 12, 14 + bottomPad),
+                  padding: EdgeInsets.fromLTRB(12, 10, 12, 10 + bottomPad),
                   child: Row(
                     children: [
                       Expanded(
@@ -133,13 +133,11 @@ class _AppTabBar extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 42),
-                          child: _TabLabel(
-                            label: 'Mentor AI',
-                            selected: currentIndex == 2,
-                            onTap: () => onTap(2),
-                          ),
+                        child: _TabLabel(
+                          label: 'Mentor AI',
+                          selected: currentIndex == 2,
+                          onTap: () => onTap(2),
+                          icon: const SizedBox(width: 24, height: 24),
                         ),
                       ),
                       Expanded(
@@ -203,31 +201,32 @@ class _MentorButton extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(999),
         child: Container(
-          width: 74,
-          height: 74,
+          width: 72,
+          height: 72,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
               colors: [
-                Color(0xFF33B6FF),
-                Color(0xFF1F6BFF),
+                Color(0xFF068EFF),
+                Color(0xFF001644),
               ],
+              stops: [0.29, 1.0],
             ),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF1F6BFF).withValues(alpha: 0.35),
-                blurRadius: 30,
-                offset: const Offset(0, 14),
+                color: const Color(0xFF068EFF).withValues(alpha: 0.26),
+                blurRadius: 26,
+                offset: const Offset(0, 12),
               ),
             ],
           ),
           child: Center(
             child: Image.asset(
-              'assets/tab/mentor_ai.png',
-              width: 48,
-              height: 48,
+              'assets/mentorai.png',
+              width: 54,
+              height: 54,
               fit: BoxFit.contain,
               filterQuality: FilterQuality.high,
               errorBuilder: (context, error, stackTrace) => Icon(
@@ -270,12 +269,12 @@ class _TabItem extends StatelessWidget {
       onTap: () => onTap(index),
       icon: Image.asset(
         selected ? selectedAsset : unselectedAsset,
-        width: 26,
-        height: 26,
+        width: 24,
+        height: 24,
         fit: BoxFit.contain,
         errorBuilder: (context, error, stackTrace) => Icon(
           fallbackIcon,
-          size: 26,
+          size: 24,
           color: selected
               ? const Color(0xFF2B7BFF)
               : Colors.white.withValues(alpha: 0.82),
@@ -310,7 +309,7 @@ class _TabLabel extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(18),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -319,7 +318,7 @@ class _TabLabel extends StatelessWidget {
                   data: IconThemeData(color: color),
                   child: icon!,
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
               ],
               Text(
                 label,
@@ -327,7 +326,7 @@ class _TabLabel extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: color,
-                  fontSize: 12,
+                  fontSize: 11,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.2,
                 ),
