@@ -32,14 +32,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
     ),
     _OnboardingSlide(
       assetPath: 'assets/onboarding/onboarding2.png',
-      accentA: Color(0xFF2EE5D9),
-      accentB: Color(0xFF2B7BFF),
+      accentA: Color(0xFF9BB6FF),
+      accentB: Color(0xFF1F6BFF),
       title: TextSpan(
         children: [
           TextSpan(text: 'Gelişimini\n'),
           TextSpan(
             text: 'Takip',
-            style: TextStyle(color: Color(0xFF2EE5D9)),
+            style: TextStyle(color: Color(0xFF9BB6FF)),
           ),
           TextSpan(text: ' Et'),
         ],
@@ -49,14 +49,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
     ),
     _OnboardingSlide(
       assetPath: 'assets/onboarding/onboarding3.png',
-      accentA: Color(0xFFFF7AD9),
-      accentB: Color(0xFF9B5CFF),
+      accentA: Color(0xFF9BB6FF),
+      accentB: Color(0xFF1F6BFF),
       title: TextSpan(
         children: [
           TextSpan(text: 'Kişisel\n'),
           TextSpan(
             text: 'Sistemini',
-            style: TextStyle(color: Color(0xFFFF7AD9)),
+            style: TextStyle(color: Color(0xFF9BB6FF)),
           ),
           TextSpan(text: ' Kur'),
         ],
@@ -111,33 +111,18 @@ class _OnboardingPageState extends State<OnboardingPage> {
               itemCount: _slides.length,
               onPageChanged: (index) => setState(() => _currentPage = index),
               itemBuilder: (context, index) {
-                final bg = _slides[index];
-                return _OnboardingBackground(
-                  assetPath: bg.assetPath,
-                  accentColor: Color.lerp(bg.accentA, bg.accentB, 0.6)!,
-                );
+                return _OnboardingBackground(assetPath: _slides[index].assetPath);
               },
-            ),
-          ),
-          Positioned.fill(
-            child: _VividGlows(
-              accentA: slide.accentA,
-              accentB: slide.accentB,
             ),
           ),
           Positioned.fill(
             child: DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin: const Alignment(-0.10, -1),
-                  end: const Alignment(0.10, 1),
-                  colors: [
-                    const Color(0x00061022),
-                    Color.lerp(slide.accentA, slide.accentB, 0.65)!
-                        .withValues(alpha: 0.10),
-                    const Color(0xFF061022).withValues(alpha: 0.78),
-                    const Color(0xFF061022).withValues(alpha: 0.98),
-                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0x00061022), Color(0xB3061022), Color(0xFF061022)],
+                  stops: [0.0, 0.70, 1.0],
                 ),
               ),
             ),
@@ -229,49 +214,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
 }
 
 class _OnboardingBackground extends StatelessWidget {
-  const _OnboardingBackground({
-    required this.assetPath,
-    required this.accentColor,
-  });
+  const _OnboardingBackground({required this.assetPath});
 
   final String assetPath;
-  final Color accentColor;
-
-  static final List<double> _vividMatrix = _saturationMatrix(1.10);
-
-  static List<double> _saturationMatrix(double saturation) {
-    final invSat = 1 - saturation;
-    const r = 0.2126;
-    const g = 0.7152;
-    const b = 0.0722;
-
-    final rInvSat = r * invSat;
-    final gInvSat = g * invSat;
-    final bInvSat = b * invSat;
-
-    return [
-      rInvSat + saturation,
-      gInvSat,
-      bInvSat,
-      0,
-      0,
-      rInvSat,
-      gInvSat + saturation,
-      bInvSat,
-      0,
-      0,
-      rInvSat,
-      gInvSat,
-      bInvSat + saturation,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-    ];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -288,22 +233,13 @@ class _OnboardingBackground extends StatelessWidget {
               child: Transform.scale(
                 scale: 1.18,
                 alignment: Alignment.topCenter,
-                child: ColorFiltered(
-                  colorFilter: ColorFilter.matrix(_vividMatrix),
-                  child: ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                      accentColor.withValues(alpha: 0.10),
-                      BlendMode.softLight,
-                    ),
-                    child: Image.asset(
-                      assetPath,
-                      fit: BoxFit.cover,
-                      alignment: Alignment.topCenter,
-                      filterQuality: FilterQuality.high,
-                      isAntiAlias: true,
-                      gaplessPlayback: true,
-                    ),
-                  ),
+                child: Image.asset(
+                  assetPath,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
+                  filterQuality: FilterQuality.high,
+                  isAntiAlias: true,
+                  gaplessPlayback: true,
                 ),
               ),
             ),
@@ -342,15 +278,6 @@ class _PageDots extends StatelessWidget {
                 ? activeColor
                 : const Color(0xFF26324A),
             borderRadius: BorderRadius.circular(999),
-            boxShadow: index == dotIndex
-                ? [
-                    BoxShadow(
-                      color: activeColor.withValues(alpha: 0.45),
-                      blurRadius: 16,
-                      offset: const Offset(0, 6),
-                    ),
-                  ]
-                : null,
           ),
         ),
       ),
@@ -425,85 +352,4 @@ class _OnboardingSlide {
   final String description;
   final Color accentA;
   final Color accentB;
-}
-
-class _VividGlows extends StatelessWidget {
-  const _VividGlows({
-    required this.accentA,
-    required this.accentB,
-  });
-
-  final Color accentA;
-  final Color accentB;
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final w = constraints.maxWidth;
-          final glow = w * 0.80;
-
-          return Stack(
-            children: [
-              Positioned(
-                left: -glow * 0.35,
-                top: -glow * 0.30,
-                width: glow,
-                height: glow,
-                child: _RadialGlow(color: accentA, alpha: 0.22),
-              ),
-              Positioned(
-                right: -glow * 0.40,
-                top: -glow * 0.22,
-                width: glow * 0.9,
-                height: glow * 0.9,
-                child: _RadialGlow(color: accentB, alpha: 0.18),
-              ),
-              Positioned(
-                left: -glow * 0.10,
-                bottom: -glow * 0.55,
-                width: glow * 1.1,
-                height: glow * 1.1,
-                child: _RadialGlow(color: accentB, alpha: 0.16),
-              ),
-              Positioned(
-                right: -glow * 0.18,
-                bottom: -glow * 0.48,
-                width: glow,
-                height: glow,
-                child: _RadialGlow(color: accentA, alpha: 0.14),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _RadialGlow extends StatelessWidget {
-  const _RadialGlow({
-    required this.color,
-    required this.alpha,
-  });
-
-  final Color color;
-  final double alpha;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: RadialGradient(
-          radius: 0.95,
-          colors: [
-            color.withValues(alpha: alpha),
-            Colors.transparent,
-          ],
-          stops: const [0.0, 1.0],
-        ),
-      ),
-    );
-  }
 }
