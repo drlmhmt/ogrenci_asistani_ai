@@ -39,3 +39,5 @@ flutter:
     - assets/onboarding/onboarding1.png
     - assets/onboarding/onboarding2.png
     - assets/onboarding/onboarding3.png
+    - assets/userinfo/exams.png
+    - assets/userinfo/field selection.png

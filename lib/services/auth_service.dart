@@ -238,6 +238,11 @@ class AuthService {
         'onboardingSeen': true,
         'onboardingGoalIndex': selection.goalIndex,
         'onboardingGoalText': selection.goalText,
+        'selectedExamKey': selection.examKey,
+        'selectedExamTitle': selection.examTitle,
+        'selectedFieldKey': selection.fieldKey,
+        'selectedFieldTitle': selection.fieldTitle,
+        'targetScore': selection.targetScore,
         'onboardingUpdatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
     } catch (_) {}

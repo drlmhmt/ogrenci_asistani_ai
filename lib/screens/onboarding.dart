@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'login_page.dart';
+import 'exams_page.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -78,7 +78,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     if (_currentPage == _slides.length - 1) {
       if (!mounted) return;
       await Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const LoginPage()),
+        MaterialPageRoute(builder: (_) => const ExamsPage()),
       );
       return;
     }
@@ -91,7 +91,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   void _skip() {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const LoginPage()),
+      MaterialPageRoute(builder: (_) => const ExamsPage()),
     );
   }
 
