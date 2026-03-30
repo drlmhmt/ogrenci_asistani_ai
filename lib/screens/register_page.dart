@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
-import 'home.dart';
 import 'login_page.dart';
 import 'mail_verification_page.dart';
+import 'main_tab_scaffold.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -136,7 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (!mounted) return;
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (_) => const HomePage()),
+      MaterialPageRoute(builder: (_) => const MainTabScaffold()),
       (route) => false,
     );
   }
