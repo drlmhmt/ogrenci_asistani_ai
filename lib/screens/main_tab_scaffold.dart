@@ -4,7 +4,7 @@ import 'analysis_page.dart';
 import 'home.dart';
 import 'mentor_ai_page.dart';
 import 'plan_page.dart';
-import 'profile_page.dart';
+import 'profile/profile_page.dart';
 
 class MainTabScaffold extends StatefulWidget {
   const MainTabScaffold({super.key});
@@ -78,7 +78,9 @@ class _AppTabBar extends StatelessWidget {
   final ValueChanged<int> onTap;
 
   static const _barColor = Color(0xFF061634);
-  static const _baseHeight = 72.0;
+  /// İçerik: ikon + boşluk + etiket + InkWell padding. 72 iken iç alan 56px kalıyordu;
+  /// metin satır yüksekliği / text scale ile ~1px taşma oluşabiliyordu.
+  static const _baseHeight = 76.0;
   static const _mentorButtonSize = 64.0;
 
   @override
@@ -338,6 +340,7 @@ class _TabLabel extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (icon != null) ...[
@@ -354,6 +357,7 @@ class _TabLabel extends StatelessWidget {
                 style: TextStyle(
                   color: color,
                   fontSize: 12,
+                  height: 1.0,
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.2,
                 ),

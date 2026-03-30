@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
     const background = _HomeBackground();
     final weekDays = _buildWeekDays(DateTime.now());
     final bottomInset = MediaQuery.paddingOf(context).bottom;
-    const tabBarHeight = 72.0;
+    const tabBarHeight = 76.0;
     final scrollBottomPadding = 28 + tabBarHeight + bottomInset + 14;
 
     return Scaffold(

@@ -1,26 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/login_page.dart';
 import 'screens/onboarding.dart';
 import 'screens/main_tab_scaffold.dart';
 import 'services/onboarding_state_service.dart';
+import 'theme/app_theme.dart';
+import 'theme/theme_controller.dart';
+import 'theme/theme_controller_scope.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const BilgiAIApp());
+  final prefs = await SharedPreferences.getInstance();
+  final themeController = ThemeController(prefs);
+  await themeController.load();
+  runApp(BilgiAIApp(themeController: themeController));
 }
 
 class BilgiAIApp extends StatelessWidget {
-  const BilgiAIApp({super.key});
+  const BilgiAIApp({super.key, required this.themeController});
+
+  final ThemeController themeController;
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: _AppEntryPoint(),
+    // Scope, MaterialApp'in üstünde olmalı; aksi halde bazı bağlamlarda
+    // (builder child'ı gecikmeli vb.) ThemeControllerScope bulunamıyor.
+    return ThemeControllerScope(
+      controller: themeController,
+      child: ListenableBuilder(
+        listenable: themeController,
+        builder: (context, _) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: AppThemes.light,
+            darkTheme: AppThemes.dark,
+            themeMode: themeController.themeMode,
+            home: const _AppEntryPoint(),
+          );
+        },
+      ),
     );
   }
 }
@@ -39,12 +61,10 @@ class _AppEntryPoint extends StatelessWidget {
           return const _SplashScreen();
         }
 
-        // 👇 Onboarding daha önce görülmemişse
         if (snapshot.data == false) {
           return const OnboardingPage();
         }
 
-        // 👇 Onboarding bittiyse auth kontrolüne geç
         return const _AuthGate();
       },
     );

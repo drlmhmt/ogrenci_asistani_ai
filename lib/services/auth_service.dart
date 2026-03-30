@@ -188,6 +188,45 @@ class AuthService {
     await _auth.signOut();
   }
 
+  /// Firebase Auth + Firestore `displayName` alanını günceller.
+  Future<void> updateDisplayName(String displayName) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(code: 'no-current-user', message: null);
+    }
+    final t = displayName.trim();
+    if (t.isEmpty) {
+      throw FirebaseAuthException(code: 'invalid-display-name', message: null);
+    }
+    await user.updateDisplayName(t);
+    await user.reload();
+    await _firestore.collection('users').doc(user.uid).set({
+      'displayName': t,
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
+
+  /// E-posta/şifre ile giriş yapılmış hesaplar için şifre güncelleme.
+  Future<void> updatePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(code: 'no-current-user', message: null);
+    }
+    final email = user.email;
+    if (email == null || email.isEmpty) {
+      throw FirebaseAuthException(code: 'no-email', message: null);
+    }
+    final cred = EmailAuthProvider.credential(
+      email: email.trim(),
+      password: currentPassword,
+    );
+    await user.reauthenticateWithCredential(cred);
+    await user.updatePassword(newPassword);
+  }
+
   Future<bool> isEmailRegistered(String email) async {
     final rawEmail = email.trim();
     final normalizedEmail = rawEmail.toLowerCase();
