@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
 import '../widgets/top_alert.dart';
-import 'home.dart';
 import 'forgot_password_page.dart';
 import 'mail_verification_page.dart';
+import 'main_tab_scaffold.dart';
 import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
     if (!mounted) return;
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (_) => const HomePage()),
+      MaterialPageRoute(builder: (_) => const MainTabScaffold()),
       (route) => false,
     );
   }
