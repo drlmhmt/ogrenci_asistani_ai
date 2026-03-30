@@ -3,7 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'screens/login_page.dart';
+import 'screens/onboarding.dart';
 import 'screens/main_tab_scaffold.dart';
+import 'services/onboarding_state_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +20,33 @@ class BilgiAIApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: _AuthGate(),
+      home: _AppEntryPoint(),
+    );
+  }
+}
+
+class _AppEntryPoint extends StatelessWidget {
+  const _AppEntryPoint();
+
+  @override
+  Widget build(BuildContext context) {
+    final onboardingStateService = OnboardingStateService();
+
+    return FutureBuilder<bool>(
+      future: onboardingStateService.isOnboardingSeen(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const _SplashScreen();
+        }
+
+        // 👇 Onboarding daha önce görülmemişse
+        if (snapshot.data == false) {
+          return const OnboardingPage();
+        }
+
+        // 👇 Onboarding bittiyse auth kontrolüne geç
+        return const _AuthGate();
+      },
     );
   }
 }
@@ -39,6 +67,7 @@ class _AuthGate extends StatelessWidget {
         if (user == null) {
           return const LoginPage();
         }
+
         return const MainTabScaffold();
       },
     );
