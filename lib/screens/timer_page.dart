@@ -24,7 +24,7 @@ class _TimerPageState extends State<TimerPage> {
   Timer? _timer;
   DateTime? _endsAt;
   Duration _remaining = const Duration(minutes: 45);
-  double _minutes = 45;
+  double _configuredMinutes = 45;
   bool _running = false;
 
   @override
@@ -44,7 +44,7 @@ class _TimerPageState extends State<TimerPage> {
     _timer?.cancel();
     setState(() {
       _selected = mode;
-      _minutes = defaults[mode]!.toDouble();
+      _configuredMinutes = defaults[mode]!.toDouble();
       _remaining = Duration(minutes: defaults[mode]!);
       _running = false;
       _endsAt = null;
@@ -61,7 +61,7 @@ class _TimerPageState extends State<TimerPage> {
       return;
     }
     if (_remaining <= Duration.zero) {
-      _remaining = Duration(minutes: _minutes.round());
+      _remaining = Duration(minutes: _configuredMinutes.round());
     }
     _endsAt = DateTime.now().add(_remaining);
     _running = true;
@@ -95,7 +95,7 @@ class _TimerPageState extends State<TimerPage> {
   void _reset() {
     _timer?.cancel();
     setState(() {
-      _remaining = Duration(minutes: _minutes.round());
+      _remaining = Duration(minutes: _configuredMinutes.round());
       _running = false;
       _endsAt = null;
     });
@@ -120,7 +120,7 @@ class _TimerPageState extends State<TimerPage> {
   @override
   Widget build(BuildContext context) {
     final bottom = MediaQuery.paddingOf(context).bottom;
-    final mm = _remaining.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final mm = _remaining.inMinutes.toString().padLeft(2, '0');
     final ss = _remaining.inSeconds.remainder(60).toString().padLeft(2, '0');
 
     return Scaffold(
@@ -217,12 +217,12 @@ class _TimerPageState extends State<TimerPage> {
                       ),
                       const SizedBox(height: 26),
                       _TimerCard(
-                        minutes: _minutes,
+                        minutes: _configuredMinutes,
                         mm: mm,
                         ss: ss,
                         running: _running,
                         onChanged: (v) => setState(() {
-                          _minutes = v.roundToDouble();
+                          _configuredMinutes = v.roundToDouble();
                           _remaining = Duration(minutes: v.round());
                         }),
                       ),
