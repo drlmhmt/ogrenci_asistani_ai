@@ -652,7 +652,7 @@ class _ViewPlanPageState extends State<ViewPlanPage> {
       children: [
         const Text('Ders Materyalleri',
             style: TextStyle(color: _textPrimary, fontSize: 20, fontWeight: FontWeight.w700, letterSpacing: -0.4)),
-        const SizedBox(height: 12),
+        const SizedBox(height: 6),
         GridView.count(
           crossAxisCount: 2,
           shrinkWrap: true,
