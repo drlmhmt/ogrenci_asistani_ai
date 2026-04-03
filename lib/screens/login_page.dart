@@ -265,6 +265,11 @@ class _LoginPageState extends State<LoginPage> {
                           controller: _emailController,
                           hintText: 'Email',
                           keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          autofillHints: const [AutofillHints.username, AutofillHints.email],
+                          autocorrect: false,
+                          enableSuggestions: false,
+                          textCapitalization: TextCapitalization.none,
                           height: 56,
                         ),
                         SizedBox(height: 12 * scale),
@@ -427,6 +432,11 @@ class _AuthField extends StatelessWidget {
     required this.hintText,
     required this.height,
     this.keyboardType,
+    this.textInputAction,
+    this.autofillHints,
+    this.autocorrect = true,
+    this.enableSuggestions = true,
+    this.textCapitalization = TextCapitalization.sentences,
     this.obscureText = false,
     this.suffixIcon,
   });
@@ -435,6 +445,11 @@ class _AuthField extends StatelessWidget {
   final String hintText;
   final double height;
   final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final Iterable<String>? autofillHints;
+  final bool autocorrect;
+  final bool enableSuggestions;
+  final TextCapitalization textCapitalization;
   final bool obscureText;
   final Widget? suffixIcon;
 
@@ -445,6 +460,11 @@ class _AuthField extends StatelessWidget {
       child: TextField(
         controller: controller,
         keyboardType: keyboardType,
+        textInputAction: textInputAction,
+        autofillHints: autofillHints,
+        autocorrect: autocorrect,
+        enableSuggestions: enableSuggestions,
+        textCapitalization: textCapitalization,
         obscureText: obscureText,
         style: const TextStyle(color: Colors.white, fontSize: 15),
         decoration: InputDecoration(

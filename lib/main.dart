@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/login_page.dart';
 import 'screens/onboarding.dart';
 import 'screens/main_tab_scaffold.dart';
+import 'screens/timer_page.dart';
 import 'services/onboarding_state_service.dart';
 import 'theme/app_theme.dart';
 import 'theme/theme_controller.dart';
@@ -39,7 +40,7 @@ class BilgiAIApp extends StatelessWidget {
             theme: AppThemes.light,
             darkTheme: AppThemes.dark,
             themeMode: themeController.themeMode,
-            home: const _AppEntryPoint(),
+            home: const TimerPage(),
           );
         },
       ),
