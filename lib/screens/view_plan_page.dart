@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class ViewPlanPage extends StatefulWidget {
@@ -13,8 +14,10 @@ class _ViewPlanPageState extends State<ViewPlanPage> {
   bool _isListView = true;
 
   late final ScrollController _dayScrollController;
+  late final ScrollController _pageScrollController;
   static const double _chipWidth = 58.0;
   static const double _chipGap = 8.0;
+  bool _isScrolled = false;
 
   static const _bgColor = Color(0xFF061022);
   static const _cardColor = Color(0xFF0D1B2E);
@@ -26,12 +29,18 @@ class _ViewPlanPageState extends State<ViewPlanPage> {
   void initState() {
     super.initState();
     _dayScrollController = ScrollController();
+    _pageScrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
+    _pageScrollController.addListener(() {
+      final scrolled = _pageScrollController.offset > 10;
+      if (scrolled != _isScrolled) setState(() => _isScrolled = scrolled);
+    });
   }
 
   @override
   void dispose() {
     _dayScrollController.dispose();
+    _pageScrollController.dispose();
     super.dispose();
   }
 
@@ -296,73 +305,36 @@ class _ViewPlanPageState extends State<ViewPlanPage> {
       body: Stack(
         children: [
           const _PlanBackground(),
+          // ── Scrollable content ──
           SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(0, topPadding, 0, bottomPadding + 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildTopBar(context),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 24),
-                      _buildWeeklyFlow(),
-                      const SizedBox(height: 24),
-                      _buildDailyLessonsSection(),
-                      const SizedBox(height: 24),
-                      _buildAiSuggestionCard(),
-                      const SizedBox(height: 24),
-                      _buildDayFocusSection(),
-                      const SizedBox(height: 24),
-                      _buildUpcomingExamsSection(),
-                      const SizedBox(height: 24),
-                      _buildCourseMaterialsSection(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTopBar(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 4),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () => Navigator.of(context).pop(),
-            child: Container(
-              width: 40, height: 40,
-              decoration: BoxDecoration(
-                color: const Color(0xFF0F1D35),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF1E3050), width: 1),
-              ),
-              child: const Icon(Icons.arrow_back_ios_new_rounded, color: _textPrimary, size: 18),
-            ),
-          ),
-          const SizedBox(width: 14),
-          const Expanded(
-            child: Text(
-              'Planı Görüntüle',
-              style: TextStyle(
-                color: _textPrimary,
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                letterSpacing: -0.4,
+            controller: _pageScrollController,
+            padding: EdgeInsets.fromLTRB(0, topPadding + 64, 0, bottomPadding + 24),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 12),
+                  _buildWeeklyFlow(),
+                  const SizedBox(height: 24),
+                  _buildDailyLessonsSection(),
+                  const SizedBox(height: 24),
+                  _buildAiSuggestionCard(),
+                  const SizedBox(height: 24),
+                  _buildDayFocusSection(),
+                  const SizedBox(height: 24),
+                  _buildUpcomingExamsSection(),
+                  const SizedBox(height: 24),
+                  _buildCourseMaterialsSection(),
+                ],
               ),
             ),
           ),
-          Container(
-            width: 40, height: 40,
-            decoration: const BoxDecoration(color: Color(0xFF12243D), shape: BoxShape.circle),
-            child: const Icon(Icons.more_horiz_rounded, color: _textPrimary, size: 20),
+          // ── Blur nav bar — scroll'da blurlanır ──
+          Positioned(
+            top: 0, left: 0, right: 0,
+            child: _PlanNavBar(topPad: topPadding, isScrolled: _isScrolled,
+                onBack: () => Navigator.of(context).pop()),
           ),
         ],
       ),
@@ -1040,4 +1012,56 @@ class _LessonAction extends StatelessWidget {
       ]),
     ),
   );
+}
+
+/// Blur + ortalı title nav bar — Planı Görüntüle ekranı için
+class _PlanNavBar extends StatelessWidget {
+  const _PlanNavBar({required this.topPad, required this.isScrolled, required this.onBack});
+  final double topPad;
+  final bool isScrolled;
+  final VoidCallback onBack;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      decoration: BoxDecoration(
+        color: isScrolled ? const Color(0xFF061022).withValues(alpha: 0.7) : Colors.transparent,
+        border: isScrolled
+            ? const Border(bottom: BorderSide(color: Color(0xFF162035), width: 0.5))
+            : null,
+      ),
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: isScrolled ? 14 : 0, sigmaY: isScrolled ? 14 : 0),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(20, topPad + 12, 20, 12),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                    onTap: onBack,
+                    child: Container(
+                      width: 40, height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0F1D35),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFF1E3050)),
+                      ),
+                      child: const Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFFE6EDFF), size: 18),
+                    ),
+                  ),
+                ),
+                const Text('Planı Görüntüle',
+                    style: TextStyle(color: Color(0xFFE6EDFF), fontSize: 18,
+                        fontWeight: FontWeight.w700, letterSpacing: -0.3)),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

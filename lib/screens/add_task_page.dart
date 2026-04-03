@@ -1,43 +1,17 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MOCK DATA — öğrenci tipine göre ders listeleri
+// MOCK DATA
 // ─────────────────────────────────────────────────────────────────────────────
 class _MockData {
-  static const List<_StudentType> studentTypes = [
-    _StudentType(id: 'yks', label: 'YKS', icon: Icons.school_rounded),
-    _StudentType(id: 'lgs', label: 'LGS', icon: Icons.menu_book_rounded),
-    _StudentType(id: 'kpss', label: 'KPSS', icon: Icons.account_balance_rounded),
-    _StudentType(id: 'uni', label: 'Üniversite', icon: Icons.science_rounded),
-    _StudentType(id: 'other', label: 'Diğer', icon: Icons.star_rounded),
+  static const List<String> courses = [
+    'Matematik', 'Geometri', 'Fizik', 'Kimya', 'Biyoloji',
+    'Türkçe', 'Edebiyat', 'Tarih', 'Coğrafya', 'Felsefe',
+    'İngilizce', 'Veri Yapıları', 'Algoritmalar', 'Lineer Cebir',
+    'İşletim Sistemleri', 'Genel Tekrar', 'Proje', 'Diğer',
   ];
-
-  static const Map<String, List<String>> courses = {
-    'yks': [
-      'Matematik', 'Geometri', 'Fizik', 'Kimya', 'Biyoloji',
-      'Türkçe', 'Edebiyat', 'Tarih', 'Coğrafya', 'Felsefe',
-      'Mantık', 'İngilizce',
-    ],
-    'lgs': [
-      'Matematik', 'Fen Bilimleri', 'Türkçe', 'İnkılap Tarihi',
-      'Din Kültürü', 'İngilizce',
-    ],
-    'kpss': [
-      'Genel Yetenek', 'Genel Kültür', 'Eğitim Bilimleri',
-      'Türkçe', 'Matematik', 'Tarih', 'Coğrafya', 'Hukuk',
-      'İktisat', 'Muhasebe',
-    ],
-    'uni': [
-      'İleri Matematik', 'Veri Yapıları', 'Algoritmalar',
-      'Fizik II', 'Kimya II', 'Akademik İngilizce',
-      'Lineer Cebir', 'Olasılık & İstatistik',
-      'İşletim Sistemleri', 'Veritabanı', 'Yazılım Mühendisliği',
-    ],
-    'other': [
-      'Genel Tekrar', 'Proje', 'Okuma', 'Araştırma', 'Ödev', 'Diğer',
-    ],
-  };
 
   static const List<_TaskTemplate> templates = [
     _TaskTemplate(label: 'Konu Tekrarı', icon: Icons.refresh_rounded, duration: 45),
@@ -45,13 +19,6 @@ class _MockData {
     _TaskTemplate(label: 'Video İzle', icon: Icons.play_circle_rounded, duration: 30),
     _TaskTemplate(label: 'Deneme Sınavı', icon: Icons.assignment_rounded, duration: 180),
   ];
-}
-
-class _StudentType {
-  const _StudentType({required this.id, required this.label, required this.icon});
-  final String id;
-  final String label;
-  final IconData icon;
 }
 
 class _TaskTemplate {
@@ -79,16 +46,16 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
   static const _textSecondary = Color(0xFF7A8DAA);
   static const _border = Color(0xFF162035);
 
-  // Form state
   final _taskNameController = TextEditingController();
   final _durationController = TextEditingController(text: '45');
   final _formKey = GlobalKey<FormState>();
+  final _scrollController = ScrollController();
 
-  String _selectedTypeId = 'yks';
-  String? _selectedCourse;
-  String _priority = 'ORTA'; // DÜŞÜK / ORTA / YÜKSEK
+  String _selectedCourse = _MockData.courses.first;
+  String _priority = 'ORTA';
   bool _reminderEnabled = true;
   DateTime _reminderDate = DateTime.now().add(const Duration(hours: 2));
+  bool _isScrolled = false;
 
   late final AnimationController _heroAnim;
   late final Animation<double> _heroFade;
@@ -96,27 +63,22 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
-    _selectedCourse = _MockData.courses[_selectedTypeId]!.first;
     _heroAnim = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
     _heroFade = CurvedAnimation(parent: _heroAnim, curve: Curves.easeOut);
     _heroAnim.forward();
+    _scrollController.addListener(() {
+      final scrolled = _scrollController.offset > 10;
+      if (scrolled != _isScrolled) setState(() => _isScrolled = scrolled);
+    });
   }
 
   @override
   void dispose() {
     _taskNameController.dispose();
     _durationController.dispose();
+    _scrollController.dispose();
     _heroAnim.dispose();
     super.dispose();
-  }
-
-  List<String> get _courses => _MockData.courses[_selectedTypeId] ?? [];
-
-  void _onTypeChanged(String id) {
-    setState(() {
-      _selectedTypeId = id;
-      _selectedCourse = _MockData.courses[id]!.first;
-    });
   }
 
   void _applyTemplate(_TaskTemplate t) {
@@ -166,14 +128,13 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
   void _createTask() {
     if (!_formKey.currentState!.validate()) return;
     HapticFeedback.mediumImpact();
+    final name = _taskNameController.text.isEmpty ? _selectedCourse : _taskNameController.text;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Row(children: [
         const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
         const SizedBox(width: 10),
-        Expanded(child: Text(
-          '"${_taskNameController.text.isEmpty ? _selectedCourse! : _taskNameController.text}" görevi oluşturuldu!',
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-        )),
+        Expanded(child: Text('"$name" görevi oluşturuldu!',
+            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600))),
       ]),
       backgroundColor: _blue,
       behavior: SnackBarBehavior.floating,
@@ -192,79 +153,69 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
 
     return Scaffold(
       backgroundColor: _bg,
+      // keyboard açılınca scroll alanı küçülsün, buton yukarı çıksın
+      resizeToAvoidBottomInset: true,
       body: Form(
         key: _formKey,
         child: Stack(
           children: [
             const _TaskBg(),
-            SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(0, topPad, 0, botPad + 100),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildTopBar(context),
-                  _buildHeroCard(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+            Column(
+              children: [
+                // ─── Blur nav bar ───
+                _BlurNavBar(
+                  topPad: topPad,
+                  isScrolled: _isScrolled,
+                  child: _NavTitle(
+                    title: 'Yeni Görev',
+                    onBack: () => Navigator.of(context).pop(),
+                  ),
+                ),
+                // ─── Scrollable content ───
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                    padding: const EdgeInsets.only(bottom: 24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 20),
-                        _buildTemplates(),
-                        const SizedBox(height: 24),
-                        _buildTaskNameField(),
-                        const SizedBox(height: 16),
-                        _buildStudentTypeSelector(),
-                        const SizedBox(height: 16),
-                        _buildCourseDropdown(),
-                        const SizedBox(height: 16),
-                        _buildDurationField(),
-                        const SizedBox(height: 16),
-                        _buildPrioritySelector(),
-                        const SizedBox(height: 16),
-                        _buildReminderCard(),
+                        _buildHeroCard(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 20),
+                              _buildTemplates(),
+                              const SizedBox(height: 22),
+                              _buildTaskNameField(),
+                              const SizedBox(height: 14),
+                              _buildCourseDropdown(),
+                              const SizedBox(height: 14),
+                              _buildDurationField(),
+                              const SizedBox(height: 14),
+                              _buildPrioritySelector(),
+                              const SizedBox(height: 14),
+                              _buildReminderCard(),
+                              const SizedBox(height: 8),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                // ─── Görevi Oluştur butonu — keyboard açılınca yukarı kayar ───
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 10, 20, botPad + 16),
+                  child: _buildCreateButton(),
+                ),
+              ],
             ),
-            _buildCreateButton(botPad),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildTopBar(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-      child: Row(children: [
-        GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
-          child: Container(
-            width: 40, height: 40,
-            decoration: BoxDecoration(
-              color: const Color(0xFF0F1D35),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFF1E3050)),
-            ),
-            child: const Icon(Icons.arrow_back_ios_new_rounded, color: _textPrimary, size: 18),
-          ),
-        ),
-        const SizedBox(width: 14),
-        const Expanded(
-          child: Text('Yeni Görev',
-              style: TextStyle(color: _textPrimary, fontSize: 20, fontWeight: FontWeight.w700, letterSpacing: -0.4)),
-        ),
-        Container(
-          width: 40, height: 40,
-          decoration: const BoxDecoration(color: _blue, shape: BoxShape.circle),
-          child: const Center(
-            child: Text('AS', style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700)),
-          ),
-        ),
-      ]),
     );
   }
 
@@ -272,10 +223,10 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
     return FadeTransition(
       opacity: _heroFade,
       child: Container(
-        margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-        height: 180,
+        margin: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+        height: 175,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(26),
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -283,62 +234,50 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
           ),
           border: Border.all(color: const Color(0xFF1A2E50), width: 1),
         ),
-        child: Stack(
-          children: [
-            // Dekoratif daireler
-            Positioned(top: -30, right: -30,
-              child: Container(width: 140, height: 140,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(colors: [
-                    _blue.withValues(alpha: 0.25), Colors.transparent,
-                  ]),
-                )),
-            ),
-            Positioned(bottom: -40, left: 60,
-              child: Container(width: 100, height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(colors: [
-                    const Color(0xFF7B5EE8).withValues(alpha: 0.2), Colors.transparent,
-                  ]),
-                )),
-            ),
-            // İkon grid (dekoratif)
-            Positioned(right: 16, top: 0, bottom: 0,
-              child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                _HeroIcon(icon: Icons.timer_rounded, color: _blue),
-                const SizedBox(height: 10),
-                _HeroIcon(icon: Icons.auto_awesome_rounded, color: const Color(0xFF9B6BFF)),
-                const SizedBox(height: 10),
-                _HeroIcon(icon: Icons.trending_up_rounded, color: const Color(0xFF4CAF50)),
-              ]),
-            ),
-            // Yazı
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(26),
+          child: Stack(
+            children: [
+              // Glow daireleri
+              Positioned(top: -30, right: -20,
+                child: Container(width: 130, height: 130,
+                  decoration: BoxDecoration(shape: BoxShape.circle,
+                    gradient: RadialGradient(colors: [_blue.withValues(alpha: 0.25), Colors.transparent])))),
+              Positioned(bottom: -35, left: 80,
+                child: Container(width: 90, height: 90,
+                  decoration: BoxDecoration(shape: BoxShape.circle,
+                    gradient: RadialGradient(colors: [const Color(0xFF7B5EE8).withValues(alpha: 0.18), Colors.transparent])))),
+              // Sağdaki ikonlar — simetrik padding ile
+              Positioned(right: 20, top: 0, bottom: 0,
+                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  _HeroIcon(icon: Icons.timer_rounded, color: _blue),
+                  const SizedBox(height: 10),
+                  _HeroIcon(icon: Icons.auto_awesome_rounded, color: const Color(0xFF9B6BFF)),
+                  const SizedBox(height: 10),
+                  _HeroIcon(icon: Icons.trending_up_rounded, color: const Color(0xFF4CAF50)),
+                ]),
+              ),
+              // Sol yazı — sağda ikonlara yer bırak
+              Positioned(left: 22, bottom: 22, right: 90,
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: _blue.withValues(alpha: 0.2),
+                      color: _blue.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: _blue.withValues(alpha: 0.4)),
+                      border: Border.all(color: _blue.withValues(alpha: 0.35)),
                     ),
                     child: const Text('Odaklanma Zamanı',
-                        style: TextStyle(color: _blue, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.5)),
+                        style: TextStyle(color: _blue, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.4)),
                   ),
                   const SizedBox(height: 10),
                   const Text('Yeni bir hedefe\nodaklan',
-                      style: TextStyle(color: _textPrimary, fontSize: 26, fontWeight: FontWeight.w800,
-                          letterSpacing: -0.6, height: 1.15)),
-                ],
+                      style: TextStyle(color: _textPrimary, fontSize: 24, fontWeight: FontWeight.w800,
+                          letterSpacing: -0.5, height: 1.18)),
+                ]),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -348,8 +287,8 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Hızlı Şablon',
-            style: TextStyle(color: _textSecondary, fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 1.2)),
+        const Text('HIZLI ŞABLON',
+            style: TextStyle(color: _textSecondary, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
         const SizedBox(height: 10),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -360,25 +299,17 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
                 onTap: () => _applyTemplate(t),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: _card,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: _border),
-                  ),
+                  decoration: BoxDecoration(color: _card, borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: _border)),
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
-                    Icon(t.icon, color: _blue, size: 16),
-                    const SizedBox(width: 8),
-                    Text(t.label,
-                        style: const TextStyle(color: _textPrimary, fontSize: 13, fontWeight: FontWeight.w600)),
+                    Icon(t.icon, color: _blue, size: 15),
+                    const SizedBox(width: 7),
+                    Text(t.label, style: const TextStyle(color: _textPrimary, fontSize: 13, fontWeight: FontWeight.w600)),
                     const SizedBox(width: 6),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF162035),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text('${t.duration}dk',
-                          style: const TextStyle(color: _textSecondary, fontSize: 11)),
+                      decoration: BoxDecoration(color: const Color(0xFF162035), borderRadius: BorderRadius.circular(6)),
+                      child: Text('${t.duration}dk', style: const TextStyle(color: _textSecondary, fontSize: 11)),
                     ),
                   ]),
                 ),
@@ -397,58 +328,15 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
       child: TextFormField(
         controller: _taskNameController,
         style: const TextStyle(color: _textPrimary, fontSize: 15),
+        textInputAction: TextInputAction.done,
         decoration: InputDecoration(
           hintText: 'Örn: Kuantum Fiziği Ödevi',
-          hintStyle: TextStyle(color: _textSecondary.withValues(alpha: 0.6), fontSize: 15),
+          hintStyle: TextStyle(color: _textSecondary.withValues(alpha: 0.55), fontSize: 15),
           border: InputBorder.none,
           contentPadding: EdgeInsets.zero,
+          isDense: true,
         ),
       ),
-    );
-  }
-
-  Widget _buildStudentTypeSelector() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(bottom: 10),
-          child: Text('ÖĞRENCİ TİPİ',
-              style: TextStyle(color: _textSecondary, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
-        ),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: _MockData.studentTypes.map((t) {
-              final selected = t.id == _selectedTypeId;
-              return Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: GestureDetector(
-                  onTap: () => _onTypeChanged(t.id),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 180),
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: selected ? _blue : _card,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: selected ? _blue : _border),
-                    ),
-                    child: Row(mainAxisSize: MainAxisSize.min, children: [
-                      Icon(t.icon, color: selected ? Colors.white : _textSecondary, size: 15),
-                      const SizedBox(width: 6),
-                      Text(t.label,
-                          style: TextStyle(
-                            color: selected ? Colors.white : _textSecondary,
-                            fontSize: 13, fontWeight: FontWeight.w600,
-                          )),
-                    ]),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-      ],
     );
   }
 
@@ -463,11 +351,8 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
           dropdownColor: const Color(0xFF0D1B2E),
           icon: const Icon(Icons.keyboard_arrow_down_rounded, color: _textSecondary),
           style: const TextStyle(color: _textPrimary, fontSize: 15, fontWeight: FontWeight.w500),
-          items: _courses.map((c) => DropdownMenuItem(
-            value: c,
-            child: Text(c),
-          )).toList(),
-          onChanged: (v) => setState(() => _selectedCourse = v),
+          items: _MockData.courses.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+          onChanged: (v) => setState(() => _selectedCourse = v!),
         ),
       ),
     );
@@ -478,27 +363,50 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
       label: 'HEDEF SÜRE',
       icon: Icons.timer_outlined,
       child: Row(children: [
+        // Manuel giriş
         SizedBox(
-          width: 70,
+          width: 52,
           child: TextFormField(
             controller: _durationController,
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            textAlign: TextAlign.center,
             style: const TextStyle(color: _textPrimary, fontSize: 22, fontWeight: FontWeight.w700),
-            decoration: const InputDecoration(border: InputBorder.none, contentPadding: EdgeInsets.zero),
+            decoration: const InputDecoration(border: InputBorder.none, contentPadding: EdgeInsets.zero, isDense: true),
             validator: (v) => (v == null || v.isEmpty) ? 'Süre girin' : null,
           ),
         ),
-        const Text('dakika', style: TextStyle(color: _textSecondary, fontSize: 15)),
-        const Spacer(),
-        // Hızlı süre butonları
-        _DurationChip(label: '30', onTap: () => setState(() => _durationController.text = '30')),
-        const SizedBox(width: 6),
-        _DurationChip(label: '45', onTap: () => setState(() => _durationController.text = '45')),
-        const SizedBox(width: 6),
-        _DurationChip(label: '60', onTap: () => setState(() => _durationController.text = '60')),
-        const SizedBox(width: 6),
-        _DurationChip(label: '90', onTap: () => setState(() => _durationController.text = '90')),
+        const Text('dk', style: TextStyle(color: _textSecondary, fontSize: 14)),
+        const SizedBox(width: 10),
+        // Hızlı seçim chiplerı
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(children: ['30', '45', '60', '90', '120'].map((v) {
+              final selected = _durationController.text == v;
+              return Padding(
+                padding: const EdgeInsets.only(right: 6),
+                child: GestureDetector(
+                  onTap: () => setState(() => _durationController.text = v),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 140),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                    decoration: BoxDecoration(
+                      color: selected ? _blue : const Color(0xFF0A1524),
+                      borderRadius: BorderRadius.circular(9),
+                      border: Border.all(color: selected ? _blue : _border),
+                    ),
+                    child: Text(v,
+                        style: TextStyle(
+                          color: selected ? Colors.white : _textSecondary,
+                          fontSize: 12, fontWeight: FontWeight.w700,
+                        )),
+                  ),
+                ),
+              );
+            }).toList()),
+          ),
+        ),
       ]),
     );
   }
@@ -509,36 +417,26 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
       icon: Icons.flag_rounded,
       child: Row(children: [
         _PriorityBtn(label: 'DÜŞÜK', selected: _priority == 'DÜŞÜK',
-            color: const Color(0xFF4CAF50),
-            onTap: () => setState(() => _priority = 'DÜŞÜK')),
+            color: const Color(0xFF4CAF50), onTap: () => setState(() => _priority = 'DÜŞÜK')),
         const SizedBox(width: 8),
         _PriorityBtn(label: 'ORTA', selected: _priority == 'ORTA',
-            color: _blue,
-            onTap: () => setState(() => _priority = 'ORTA')),
+            color: _blue, onTap: () => setState(() => _priority = 'ORTA')),
         const SizedBox(width: 8),
         _PriorityBtn(label: 'YÜKSEK', selected: _priority == 'YÜKSEK',
-            color: const Color(0xFFFF6B6B),
-            onTap: () => setState(() => _priority = 'YÜKSEK')),
+            color: const Color(0xFFFF6B6B), onTap: () => setState(() => _priority = 'YÜKSEK')),
       ]),
     );
   }
 
   Widget _buildReminderCard() {
     return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: _card,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: _border),
-      ),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(color: _card, borderRadius: BorderRadius.circular(16), border: Border.all(color: _border)),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        // Başlık + toggle
         Row(children: [
-          Container(
-            width: 32, height: 32,
+          Container(width: 32, height: 32,
             decoration: BoxDecoration(color: const Color(0xFF162035), borderRadius: BorderRadius.circular(9)),
-            child: const Icon(Icons.notifications_active_rounded, color: Color(0xFFFFB56A), size: 17),
-          ),
+            child: const Icon(Icons.notifications_active_rounded, color: Color(0xFFFFB56A), size: 17)),
           const SizedBox(width: 12),
           const Text('Hatırlatıcı Kur',
               style: TextStyle(color: _textPrimary, fontSize: 15, fontWeight: FontWeight.w600)),
@@ -552,56 +450,27 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
           ),
         ]),
         if (_reminderEnabled) ...[
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           Row(children: [
             Expanded(child: GestureDetector(
               onTap: _pickDate,
-              child: Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0A1524),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: _border),
-                ),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  const Text('Tarih', style: TextStyle(color: _textSecondary, fontSize: 11, fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 4),
-                  Text(_formatDate(_reminderDate),
-                      style: const TextStyle(color: _textPrimary, fontSize: 16, fontWeight: FontWeight.w700)),
-                ]),
-              ),
+              child: _DateTimeBox(label: 'Tarih', value: _formatDate(_reminderDate)),
             )),
             const SizedBox(width: 10),
             Expanded(child: GestureDetector(
               onTap: _pickTime,
-              child: Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0A1524),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: _border),
-                ),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  const Text('Saat', style: TextStyle(color: _textSecondary, fontSize: 11, fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 4),
-                  Text(_formatTime(_reminderDate),
-                      style: const TextStyle(color: _textPrimary, fontSize: 16, fontWeight: FontWeight.w700)),
-                ]),
-              ),
+              child: _DateTimeBox(label: 'Saat', value: _formatTime(_reminderDate)),
             )),
           ]),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: const Color(0xFF162035),
-              borderRadius: BorderRadius.circular(10),
-            ),
+            decoration: BoxDecoration(color: const Color(0xFF162035), borderRadius: BorderRadius.circular(9)),
             child: Row(children: [
-              const Icon(Icons.info_outline_rounded, color: _textSecondary, size: 14),
+              const Icon(Icons.info_outline_rounded, color: _textSecondary, size: 13),
               const SizedBox(width: 8),
-              Text(_timeUntilReminder(),
-                  style: const TextStyle(color: _textSecondary, fontSize: 12)),
+              Expanded(child: Text(_timeUntilReminder(),
+                  style: const TextStyle(color: _textSecondary, fontSize: 12))),
             ]),
           ),
         ],
@@ -609,34 +478,23 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
     );
   }
 
-  Widget _buildCreateButton(double botPad) {
-    return Positioned(
-      left: 20, right: 20, bottom: botPad + 20,
-      child: GestureDetector(
-        onTap: _createTask,
-        child: Container(
-          height: 56,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF4A7FFF), Color(0xFF2B5CE6)],
-            ),
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: [
-              BoxShadow(
-                color: _blue.withValues(alpha: 0.45),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: const Center(
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
-              Icon(Icons.add_task_rounded, color: Colors.white, size: 20),
-              SizedBox(width: 10),
-              Text('Görevi Oluştur',
-                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 0.2)),
-            ]),
-          ),
+  Widget _buildCreateButton() {
+    return GestureDetector(
+      onTap: _createTask,
+      child: Container(
+        height: 54,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [Color(0xFF4A7FFF), Color(0xFF2B5CE6)]),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [BoxShadow(color: _blue.withValues(alpha: 0.4), blurRadius: 18, offset: const Offset(0, 7))],
+        ),
+        child: const Center(
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            Icon(Icons.add_task_rounded, color: Colors.white, size: 20),
+            SizedBox(width: 10),
+            Text('Görevi Oluştur',
+                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700)),
+          ]),
         ),
       ),
     );
@@ -652,16 +510,89 @@ class _AddTaskPageState extends State<AddTaskPage> with SingleTickerProviderStat
 
   String _timeUntilReminder() {
     final diff = _reminderDate.difference(DateTime.now());
-    if (diff.isNegative) return 'Hatırlatıcı geçmiş bir zamanda ayarlı';
+    if (diff.isNegative) return 'Geçmiş bir zaman — güncelle';
     if (diff.inDays > 0) return '${diff.inDays} gün ${diff.inHours % 24} saat sonra hatırlatılacak';
-    if (diff.inHours > 0) return '${diff.inHours} saat ${diff.inMinutes % 60} dakika sonra';
+    if (diff.inHours > 0) return '${diff.inHours} saat ${diff.inMinutes % 60} dk sonra hatırlatılacak';
     return '${diff.inMinutes} dakika sonra hatırlatılacak';
   }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SUB-WIDGETS
+// PAYLAŞILAN WIDGET'LAR — diğer dosyalardan da kullanılabilir
 // ─────────────────────────────────────────────────────────────────────────────
+
+/// Blur + geçiş efektli nav bar.
+/// Scroll edilince arka plan blurlanır.
+class _BlurNavBar extends StatelessWidget {
+  const _BlurNavBar({required this.topPad, required this.isScrolled, required this.child});
+  final double topPad;
+  final bool isScrolled;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      decoration: BoxDecoration(
+        color: isScrolled
+            ? const Color(0xFF061022).withValues(alpha: 0.65)
+            : Colors.transparent,
+        border: isScrolled
+            ? const Border(bottom: BorderSide(color: Color(0xFF162035), width: 0.5))
+            : null,
+      ),
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: isScrolled ? 14 : 0, sigmaY: isScrolled ? 14 : 0),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(20, topPad + 12, 20, 12),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Ortalanmış başlık + geri butonu
+class _NavTitle extends StatelessWidget {
+  const _NavTitle({required this.title, required this.onBack});
+  final String title;
+  final VoidCallback onBack;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        // Geri butonu sola hizalı
+        Align(
+          alignment: Alignment.centerLeft,
+          child: GestureDetector(
+            onTap: onBack,
+            child: Container(
+              width: 40, height: 40,
+              decoration: BoxDecoration(
+                color: const Color(0xFF0F1D35),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFF1E3050)),
+              ),
+              child: const Icon(Icons.arrow_back_ios_new_rounded, color: Color(0xFFE6EDFF), size: 18),
+            ),
+          ),
+        ),
+        // Başlık ortada
+        Text(title,
+            style: const TextStyle(
+              color: Color(0xFFE6EDFF), fontSize: 18,
+              fontWeight: FontWeight.w700, letterSpacing: -0.3,
+            )),
+      ],
+    );
+  }
+}
+
+// ─── Küçük yardımcı widget'lar ───────────────────────────────────────────────
 
 class _TaskBg extends StatelessWidget {
   const _TaskBg();
@@ -688,7 +619,7 @@ class _HeroIcon extends StatelessWidget {
     decoration: BoxDecoration(
       color: color.withValues(alpha: 0.12),
       borderRadius: BorderRadius.circular(14),
-      border: Border.all(color: color.withValues(alpha: 0.25)),
+      border: Border.all(color: color.withValues(alpha: 0.28)),
     ),
     child: Icon(icon, color: color, size: 20),
   );
@@ -699,31 +630,28 @@ class _SectionCard extends StatelessWidget {
   final String label;
   final IconData icon;
   final Widget child;
-
   @override
-  Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Padding(
-        padding: const EdgeInsets.only(bottom: 10, left: 2),
-        child: Row(children: [
-          Icon(icon, color: const Color(0xFF7A8DAA), size: 13),
-          const SizedBox(width: 6),
-          Text(label,
-              style: const TextStyle(color: Color(0xFF7A8DAA), fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
-        ]),
+  Widget build(BuildContext context) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    Padding(
+      padding: const EdgeInsets.only(bottom: 8, left: 2),
+      child: Row(children: [
+        Icon(icon, color: const Color(0xFF7A8DAA), size: 12),
+        const SizedBox(width: 5),
+        Text(label, style: const TextStyle(
+          color: Color(0xFF7A8DAA), fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.2)),
+      ]),
+    ),
+    Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0D1B2E),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: const Color(0xFF162035)),
       ),
-      Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: const Color(0xFF0D1B2E),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFF162035)),
-        ),
-        child: child,
-      ),
-    ]);
-  }
+      child: child,
+    ),
+  ]);
 }
 
 class _PriorityBtn extends StatelessWidget {
@@ -732,7 +660,6 @@ class _PriorityBtn extends StatelessWidget {
   final bool selected;
   final Color color;
   final VoidCallback onTap;
-
   @override
   Widget build(BuildContext context) => Expanded(
     child: GestureDetector(
@@ -742,37 +669,35 @@ class _PriorityBtn extends StatelessWidget {
         height: 42,
         decoration: BoxDecoration(
           color: selected ? color : const Color(0xFF0A1524),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(11),
           border: Border.all(color: selected ? color : const Color(0xFF162035)),
         ),
-        child: Center(
-          child: Text(label,
-              style: TextStyle(
-                color: selected ? Colors.white : const Color(0xFF7A8DAA),
-                fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.5,
-              )),
-        ),
+        child: Center(child: Text(label,
+            style: TextStyle(
+              color: selected ? Colors.white : const Color(0xFF7A8DAA),
+              fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.4,
+            ))),
       ),
     ),
   );
 }
 
-class _DurationChip extends StatelessWidget {
-  const _DurationChip({required this.label, required this.onTap});
+class _DateTimeBox extends StatelessWidget {
+  const _DateTimeBox({required this.label, required this.value});
   final String label;
-  final VoidCallback onTap;
-
+  final String value;
   @override
-  Widget build(BuildContext context) => GestureDetector(
-    onTap: onTap,
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0A1524),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFF162035)),
-      ),
-      child: Text(label, style: const TextStyle(color: Color(0xFF7A8DAA), fontSize: 12, fontWeight: FontWeight.w600)),
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(13),
+    decoration: BoxDecoration(
+      color: const Color(0xFF0A1524),
+      borderRadius: BorderRadius.circular(13),
+      border: Border.all(color: const Color(0xFF162035)),
     ),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(label, style: const TextStyle(color: Color(0xFF7A8DAA), fontSize: 11, fontWeight: FontWeight.w600)),
+      const SizedBox(height: 4),
+      Text(value, style: const TextStyle(color: Color(0xFFE6EDFF), fontSize: 16, fontWeight: FontWeight.w700, height: 1.2)),
+    ]),
   );
 }
